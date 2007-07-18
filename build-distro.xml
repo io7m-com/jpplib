@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="create-jpplib-zip">
+<project basedir="." default="create-jpplib-zips">
 	<!-- Import the Eclipse-generated build file 
 	     for JUnit path, build target, etc -->
-	<import file="build.xml"/>	
-	<target name="create-jpplib-zip"
+	<import file="build.xml"/>
+	<property name="jpplib.version" value="0.1"/>
+	<target name="create-jpplib-zips"
+		depends="create-jpplib-bin-zip,create-jpplib-src-zip"/>
+	<target name="create-jpplib-bin-zip"
 		depends="create-jpplib-jar,create-javadocs">
-		<zip destfile="jpplib.zip" update="false">
-			<fileset dir=".">
+		<zip destfile="jpplib-bin-${jpplib.version}.zip" update="false">
+			<zipfileset dir="." prefix="jpplib-bin-${jpplib.version}">
 				<include name="api/"/>
 				<include name="demo/"/>
 				<include name="LICENSE"/>
 				<include name="README"/>
 				<include name="jpplib.jar"/>
-			</fileset>
+			</zipfileset>
+		</zip>
+	</target>
+	<target name="create-jpplib-src-zip">
+		<zip destfile="jpplib-src-${jpplib.version}.zip" update="false">
+			<zipfileset dir="." prefix="jpplib-src-${jpplib.version}">
+				<include name="src/"/>
+				<include name="demo/"/>
+				<include name=".project"/>
+				<include name=".classpath"/>
+				<include name="build.xml"/>
+				<include name="build-distro.xml"/>
+				<include name="LICENSE"/>
+				<include name="README"/>
+				<include name="README-devel"/>
+			</zipfileset>
 		</zip>
 	</target>
    	<target name="create-javadocs">
