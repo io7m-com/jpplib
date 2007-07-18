@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="create-jpplib-zip">
+	<!-- Import the Eclipse-generated build file 
+	     for JUnit path, build target, etc -->
+	<import file="build.xml"/>	
+	<target name="create-jpplib-zip"
+		depends="create-jpplib-jar,create-javadocs">
+		<zip destfile="jpplib.zip" update="false">
+			<fileset dir=".">
+				<include name="api/"/>
+				<include name="demo/"/>
+				<include name="LICENSE"/>
+				<include name="README"/>
+				<include name="jpplib.jar"/>
+			</fileset>
+		</zip>
+	</target>
+   	<target name="create-javadocs">
+    	<delete dir="api"/>
+   		<javadoc destdir="api"
+				 classpathref="JUnit 3.8.1.libraryclasspath">
+   			<fileset dir="src" id="id">
+    			<exclude name="**/TestLayouter.java"/>
+    			<exclude name="**/package.html"/>
+			</fileset>
+   		</javadoc>
+    </target>
+	<target name="create-jpplib-jar" depends="build">
+		<jar destfile="jpplib.jar" update="false"
+			basedir="bin" 
+			includes="de/**"
+			excludes="**/Test*"/>
+	</target>
+</project>
