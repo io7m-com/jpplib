@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="jpplib.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/JPPlib/create-jpplib.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{TestLayouter.java"/>
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{StringBackend.java"/>
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{Layouter.java"/>
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{Printer.java"/>
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{NoExceptions.java"/>
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{Backend.java"/>
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{WriterBackend.java"/>
+        <javaElement handleIdentifier="=JPPlib/src&lt;de.uka.ilkd.pp{UnbalancedBlocksException.java"/>
+    </selectedElements>
+</jardesc>
