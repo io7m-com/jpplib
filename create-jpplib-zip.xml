@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="create-jpplib-zip" name="JPPlib">
+	<target name="create-jpplib-zip"
+		depends="create-jpplib-jar">
+		<zip destfile="jpplib.zip" update="false">
+			<fileset dir=".">
+				<include name="api/"/>
+				<include name="demo/"/>
+				<include name="LICENSE"/>
+				<include name="README"/>
+				<include name="jpplib.jar"/>
+			</fileset>
+		</zip>
+	</target>
+	<target name="create-jpplib-jar">
+		<jar destfile="jpplib.jar" update="false"
+			basedir="bin" 
+			includes="de/**"
+			excludes="**/Test*"/>
+	</target>
+</project>
