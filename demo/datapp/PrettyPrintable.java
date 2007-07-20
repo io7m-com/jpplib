@@ -18,6 +18,11 @@ package datapp;
 
 import de.uka.ilkd.pp.*;
 
+/** An interface for objects that can pretty print themselves.*/
 public interface PrettyPrintable {
+	/** Pretty prints <code>this</code> to the 
+	 * {@link de.uka.ilkd.pp.Layouter} <code>l</code>.
+	 * Closes any blocks it opens.
+	 */ 
 	public void prettyPrint(Layouter l);
 }

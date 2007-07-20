@@ -95,7 +95,17 @@ public class BoxArrays {
 		return result;
 	}
 
-
+	/** Box all elements of an array.
+	 * This produces an <code>Integer[]</code> from
+	 * an <code>int[]</code> and similarly for all other
+	 * primitive types.  Arrays of non-primitive types are
+	 * returned unchanged.  Any other objects lead to an
+	 * AssertionError
+	 * 
+	 * @param o an object of any array type
+	 * @return the boxed array
+	 * @throws java.lang.AssertionError if <code>o</code> is not an array
+	 */
 	public static Object[] boxArray(Object o) {
 		assert o.getClass().isArray();
 		Class<?> comp = o.getClass().getComponentType();

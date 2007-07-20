@@ -19,22 +19,43 @@ package datapp;
 import de.uka.ilkd.pp.*;
 import java.util.*;
 
+/** Utility class to pretty-print arbitrary objects.
+ * There is a static method 
+ * {@link #prettyPrint(Object)} which produces a pretty-printed
+ * String representation of an arbitrary object, with useful
+ * layouts for collections, arrays, and maps.  See the 
+ * documentation of that method for details.
+ * 
+ * @author mgiese
+ *
+ */
 public class DataPrettyPrinter {
 
+	/** The maximum line width */
 	public final int DEFAULT_LINE_WIDTH = 80;
 
+	/** The indentation, in particular for Map entries. */
 	public final int DEFAULT_INDENTATION = 2;
 
+	/** The layouter used for pretty printing. */
 	private Layouter<NoExceptions> out;
 
+	/** The backend where the output can be collected */
 	private StringBackend back = null;
 
-	public DataPrettyPrinter() {
+	/** Construct a DataPrettyPrinter with given line width and indentation.*/
+	private DataPrettyPrinter() {
 		back = new StringBackend(DEFAULT_LINE_WIDTH);
 		out = new Layouter<NoExceptions>(back, DEFAULT_INDENTATION);
 	}
 
-	public String getString() {
+	/** Finalize printing. */
+	private void close() {
+		out.close();
+	}
+	
+	/** Return the string printed to the backend. */
+	private String getString() {
 		return back.getString();
 	}
 
@@ -49,10 +70,62 @@ public class DataPrettyPrinter {
 	 * using their prettyPrint method. Any other objects are printed using their
 	 * standard String representation.
 	 * 
+	 * <h4>Layout for container types</h4>
+	 * A collection ({@link java.util.List} or {@link java.util.Set}) is printed as
+	 * <pre>
+	 * [xxx, yyy, zzz]
+	 * </pre>
+	 * if it fits on one line, and as
+	 * <pre>
+	 * [xxx,
+	 *  yyy,
+	 *  zzz]
+	 * </pre>
+	 * otherwise.  The same format is used for arrays.
+	 * 
+	 * <p>A {@link java.util.Map} is printed as
+	 * <pre>
+	 * {k1=v1, k2=v2, k3=v3]
+	 * </pre>
+	 * if it fits on one line, and as
+	 * <pre>
+	 * {key1=val1,
+	 *  key2=val2,
+	 *  key3=val3]
+	 * </pre>
+	 * otherwise.  If values don't fit on one line, the
+	 * key-value pairs will also be spread over two lines, e.g.
+	 * <pre>
+	 * {key1=val1,
+	 *  key2=
+	 *    [long,
+	 *     long,
+	 *     value],
+	 *  key3=val3]
+	 * </pre>
+	 * This is to prevent long keys from adding too much indentation.
+	 *
+	 * <p> 
+	 * 
+	 * @param o
+	 *            the object to be pretty printed
+	 * @return the pretty-printed String representation of <code>o</code>
+	 */
+	public static String prettyPrint(Object o) {
+		DataPrettyPrinter dpp = new DataPrettyPrinter();
+		dpp.prettyPrintObject(o);
+		dpp.close();
+		return dpp.getString();
+	}
+	
+	/** Print <code>o</code> to this object's Layouter.
+	 * Figures out the type of <code>o</code> and delgates
+	 * to one of the specialized printing methods.
+	 * 
 	 * @param o
 	 *            the object to be pretty printed
 	 */
-	public void prettyPrint(Object o) {
+	private void prettyPrintObject(Object o) {
 		if (o instanceof Collection<?>) {
 			prettyPrintCollection((Collection<?>) o);
 		} else if (o instanceof Map<?, ?>) {
@@ -66,31 +139,67 @@ public class DataPrettyPrinter {
 		}
 	}
 
-	public void prettyPrintCollection(Collection<?> c) {
+	/** Print a collection.
+	 * This is printed as
+	 * <pre>
+	 * [xxx, yyy, zzz]
+	 * </pre>
+	 * if it fits on one line, and as
+	 * <pre>
+	 * [xxx,
+	 *  yyy,
+	 *  zzz]
+	 * </pre>
+	 * otherwise.
+	 * 
+	 * @param c A collection
+	 */
+	private void prettyPrintCollection(Collection<?> c) {
 		out.print("[").beginC(0);
 		boolean first = true;
 		for (Object o : c) {
 			if (!first) {
 				out.print(",").brk(1, 0);
 			}
-			prettyPrint(o);
+			prettyPrintObject(o);
 			first = false;
 		}
 		out.print("]").end();
 	}
 
 	/** Pretty prints an array og reference or primitive elements.
-	 * This is private because it would crash if called on anything
-	 * except an array.
+	 * The format is the same as for collections.
 	 * 
-	 * @param o
+	 * @param o an object, has to be an array!
 	 */
 	private void prettyPrintArray(Object o) {
 		Object[] boxed = BoxArrays.boxArray(o);
 		prettyPrintCollection(Arrays.asList(boxed));
 	}
 	
-	public void prettyPrintMap(Map<?, ?> m) {
+	/** Print a map.
+	 * This is printed as
+	 * <pre>
+	 * {k1=v1, k2=v2, k3=v3]
+	 * </pre>
+	 * if it fits on one line, and as
+	 * <pre>
+	 * {key1=val1,
+	 *  key2=val2,
+	 *  key3=val3]
+	 * </pre>
+	 * otherwise.  If values don't fit on one line, the
+	 * key-value pairs will also be spread over two lines, e.g.
+	 * <pre>
+	 * {key1=val1,
+	 *  key2=
+	 *    [long,
+	 *     long,
+	 *     value],
+	 *  key3=val3]
+	 * </pre>
+	 */
+	private void prettyPrintMap(Map<?, ?> m) {
 		out.print("{").beginC(0);
 		boolean first = true;
 		for (Map.Entry<?, ?> e : m.entrySet()) {
@@ -103,27 +212,41 @@ public class DataPrettyPrinter {
 		out.print("}").end();
 	}
 
-	public void prettyPrintEntry(Map.Entry<?, ?> e) {
+	/** Print a map entry.
+	 * This is printed as
+	 * <pre>
+	 * key=val
+	 * </pre>
+	 * if it fits on one line, and as
+	 * <pre>
+	 * key=
+	 *   val
+	 * </pre>
+	 * otherwise.  This is mailny to prevent key from adding too
+	 * much indentation.
+	 */
+	private void prettyPrintEntry(Map.Entry<?, ?> e) {
 		out.beginC();
-		prettyPrint(e.getKey());
+		prettyPrintObject(e.getKey());
 		out.print("=").brk(0, 0);
-		prettyPrint(e.getValue());
+		prettyPrintObject(e.getValue());
 		out.end();
 	}
 
-	public void prettyPrintDefault(Object o) {
+	/** Pretty print a value according to its standard
+	 * string representation.
+	 * 
+	 * @param o the object to print
+	 */
+	private void prettyPrintDefault(Object o) {
 		out.print(String.valueOf(o));
 	}
 
 	public static void main(String[] args) {
-		DataPrettyPrinter dpp;
-
 		System.out.println("A short list\n");
 		List imsevimse = Arrays.asList(new String[] { "imse", "vimse",
 				"spindel" });
-		dpp = new DataPrettyPrinter();
-		dpp.prettyPrint(imsevimse);
-		System.out.println(dpp.getString());
+		System.out.println(prettyPrint(imsevimse));
 
 		System.out.println("\nA nested array\n");
 		int[][] pas = new int[10][];
@@ -134,14 +257,10 @@ public class DataPrettyPrinter {
 				pas[i][j] = pas[i-1][j] + pas[i-1][j-1];
 			}
 		}
-		dpp = new DataPrettyPrinter();
-		dpp.prettyPrint(pas);
-		System.out.println(dpp.getString());
+		System.out.println(prettyPrint(pas));
 
 		System.out.println("\nThe System environment\n");
-		dpp = new DataPrettyPrinter();
-		dpp.prettyPrint(System.getenv());
-		System.out.println(dpp.getString());
+		System.out.println(prettyPrint(System.getenv()));
 
 		System.out.println("\nA list of maps from Strings to stuff");
 		List<Map<String, Object>> l = new ArrayList<Map<String, Object>>();
@@ -156,8 +275,6 @@ public class DataPrettyPrinter {
 			m.put("some multiples", mult);
 			l.add(m);
 		}
-		dpp = new DataPrettyPrinter();
-		dpp.prettyPrint(l);
-		System.out.println(dpp.getString());
+		System.out.println(prettyPrint(l));
 	}
 }

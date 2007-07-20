@@ -27,6 +27,19 @@ import org.xml.sax.helpers.*;
  * an XML file using SAX and pretty-prints its outline,
  * i.e. just the start and end tags.
  * 
+ * <p>The Layout is like
+ * <pre>
+ * &lt;doc&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/doc&gt;
+ * </pre>
+ * as long as everything fits on one line.  Otherwise, elements
+ * are broken, and sub-elements are indented, e.g.
+ * <pre>
+ * &lt;doc&gt;
+ *     &lt;head&gt;&lt;/head&gt;
+ *     &lt;body&gt;&lt;/body&gt;
+ * &lt;/doc&gt;
+ * </pre>
+ * 
  * @author Martin Giese
  *
  */
