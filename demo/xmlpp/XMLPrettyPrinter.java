@@ -16,11 +16,20 @@
 
 package xmlpp;
 
-import de.uka.ilkd.pp.*;
-import java.io.*;
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.ParserAdapter;
+
+import de.uka.ilkd.pp.Layouter;
 
 /** Pretty-prints outline of an XML document.
  * This class is a demo for the JPPLib classes.  It reads
