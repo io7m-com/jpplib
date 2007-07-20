@@ -45,6 +45,8 @@ import org.xml.sax.helpers.*;
  */
 public class XMLPrettyPrinter extends DefaultHandler {
  
+	public static final int INDENTATION = 3;
+	
 	private PrintStream out;
 	private Layouter<java.io.IOException> pp;
 	private boolean insertBreak;
@@ -125,7 +127,7 @@ public class XMLPrettyPrinter extends DefaultHandler {
 			if (insertBreak) {
 				pp.brk(0,0);
 			}
-			pp.beginC(3).print("<"+localName);
+			pp.beginC(INDENTATION).print("<"+localName);
 			printAttributes(atts);
 			pp.print(">");
 			insertBreak = true;
@@ -161,7 +163,7 @@ public class XMLPrettyPrinter extends DefaultHandler {
 		try {
 			wrapUpCharacters();
 			if (insertBreak) {
-				pp.brk(0,-4);
+				pp.brk(0,-INDENTATION);
 			}
 			pp.print("</"+localName+">").end();
 			insertBreak = true;
