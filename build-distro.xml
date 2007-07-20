@@ -3,7 +3,8 @@
 	<!-- Import the Eclipse-generated build file 
 	     for JUnit path, build target, etc -->
 	<import file="build.xml"/>
-	<property name="jpplib.version" value="0.1"/>
+	<property name="jpplib.version" value="0.2"/>
+	<property name="jpplib.jarfile" value="jpplib-${jpplib.version}.jar"/>
 	<target name="create-jpplib-zips"
 		depends="create-jpplib-bin-zip,create-jpplib-src-zip"/>
 	<target name="create-jpplib-bin-zip"
@@ -14,7 +15,7 @@
 				<include name="demo/"/>
 				<include name="LICENSE"/>
 				<include name="README"/>
-				<include name="jpplib.jar"/>
+				<include name="${jpplib.jarfile}"/>
 			</zipfileset>
 		</zip>
 	</target>
@@ -36,15 +37,17 @@
    	<target name="create-javadocs">
     	<delete dir="api"/>
    		<javadoc destdir="api"
-				 classpathref="JUnit 3.8.1.libraryclasspath">
+				 classpathref="JUnit 3.8.1.libraryclasspath"
+   			     use="true">
    			<fileset dir="src" id="id">
     			<exclude name="**/TestLayouter.java"/>
     			<exclude name="**/package.html"/>
 			</fileset>
+   			<header><![CDATA[<h1>Java Pretty Printer Library v${jpplib.version}</h1>]]></header>
    		</javadoc>
     </target>
 	<target name="create-jpplib-jar" depends="build">
-		<jar destfile="jpplib.jar" update="false"
+		<jar destfile="${jpplib.jarfile}" update="false"
 			basedir="bin" 
 			includes="de/**"
 			excludes="**/Test*"/>
