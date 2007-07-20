@@ -48,6 +48,7 @@ public class XMLPrettyPrinter extends DefaultHandler {
 	private PrintStream out;
 	private Layouter<java.io.IOException> pp;
 	private boolean insertBreak;
+	private boolean lastSawCharacters = false;
 	
 	public XMLPrettyPrinter(PrintStream out) {
 		this.out = out;
@@ -55,26 +56,110 @@ public class XMLPrettyPrinter extends DefaultHandler {
 	}
 
 	@Override
+	public void characters(char[] ch, int start, int length) 
+	throws SAXException {
+		try {
+			// collect words
+			String quotedText = quoteCharacterData(ch, start, length).trim();
+			String[] words=quotedText.split("\\s+");
+			// if last element was arleady characters, continue with a
+			// separating brk, otherwise, start new inconsisten block.
+			if (lastSawCharacters) {
+				pp.brk(1,0);
+			} else {
+				pp.beginI(0);
+			}
+			// output words separated by blanks
+			boolean brk = false;
+			for(String word:words) {
+				if (brk) {
+					pp.brk(1,0);
+				}
+				pp.print(word);
+				brk = true;
+			}
+			lastSawCharacters = true;
+		} catch (IOException e) {
+			throw new SAXException(e);
+		}			
+	}
+
+	private String quoteCharacterData(char[] ch, int start, int length) {
+		StringBuilder sb = new StringBuilder();
+		for(int i=start;i<start+length;i++) {
+			char c;
+			switch (c=ch[i]) {
+			case '<':
+				sb.append("&lt;");
+				break;
+			case '>':
+				sb.append("&gt;");
+				break;
+			case '&':
+				sb.append("&amp;");
+				break;
+			default:
+				sb.append(c);
+			break;
+			}
+		}
+		return sb.toString();
+	}
+
+	private void wrapUpCharacters() 
+	throws IOException {
+		if (lastSawCharacters) {
+			pp.end();
+			lastSawCharacters = false;
+		}
+	}
+	
+	@Override
 	public void startElement(String namespace, 
 			String localName, 
 			String qName,
 			Attributes atts) 
 	throws SAXException {
 		try {
+			wrapUpCharacters();
 			if (insertBreak) {
 				pp.brk(0,0);
 			}
-			pp.beginC(4).print("<"+localName+">");
+			pp.beginC(3).print("<"+localName);
+			printAttributes(atts);
+			pp.print(">");
 			insertBreak = true;
 		} catch (IOException e) {
 			throw new SAXException(e);
 		}
 	}
 
+	public void printAttributes(Attributes atts)
+	throws IOException {
+		if (atts.getLength()>0) {
+			pp.print(" ").beginC(0);
+			for (int i=0;i<atts.getLength();i++) {
+				pp.print(atts.getLocalName(i)
+						+"="+quoteAttrValue(atts.getValue(i)));
+				if (i!=atts.getLength()-1) {
+					pp.brk(1,0);
+				}
+			}
+			pp.end();
+		}
+	}
+	
+	public String quoteAttrValue(String s) {
+		return "\""
+			+s.replaceAll("\"", "&quot;")
+			  .replaceAll("\'", "&apos;")+"\"";
+	}
+	
 	@Override
 	public void endElement(String uri, String localName, String qName) 
 	throws SAXException {
 		try {
+			wrapUpCharacters();
 			if (insertBreak) {
 				pp.brk(0,-4);
 			}
@@ -99,6 +184,7 @@ public class XMLPrettyPrinter extends DefaultHandler {
 		if (insertBreak) {
 			pp.brk(0,0);
 		}
+		wrapUpCharacters();
 		pp.end().close();
 	}
 
