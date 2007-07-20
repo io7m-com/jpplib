@@ -172,6 +172,16 @@ public class XMLPrettyPrinter extends DefaultHandler {
 		}
 	}
 
+	@Override
+	public void processingInstruction(String target, String data) 
+	throws SAXException {
+		try {
+			pp.print("<?"+target+" "+data+"?>").nl();
+		} catch (IOException e) {
+			throw new SAXException(e);
+		}
+	}
+	
 	public void process(String urlString) 
 	throws Exception {
 		SAXParserFactory spf = 
@@ -181,6 +191,7 @@ public class XMLPrettyPrinter extends DefaultHandler {
 			new ParserAdapter(sp.getParser());
 		pa.setContentHandler(this);
         pp.beginC(0);
+        pp.print("<?xml version=\"1.0\"?>").nl();
         insertBreak = false;
 		pa.parse(urlString);
 		if (insertBreak) {
