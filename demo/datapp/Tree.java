@@ -45,7 +45,7 @@ public class Tree<E> implements PrettyPrintable {
 	
 	public <Exc extends Exception> void prettyPrint(DataLayouter<Exc> l) 
 	throws Exc {
-		l.print(label).beginC(0);
+		l.beginC(3).print(label);
 		if (!isLeaf()) {
 			l.print("(").brk(0, 0);
 			boolean first = true;

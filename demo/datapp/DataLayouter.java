@@ -32,9 +32,13 @@ import java.util.Map;
  * arrays.  Classes implementing the interface {@link PrettyPrintable}
  * provide their own method for printing themselves to a DataLayouter.
  * 
+ * <b>TODO</b>: if this proves to work nicely, maybe it should be moved 
+ * to the de.uka.ilkd.pp package, along with the PrettyPrintable
+ * interface.
+ * 
  * @author mgiese
  *
- * @param <Exc>
+ * @param <Exc> The type of exceptions thrown by the backend and passed through
  */
 public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 
@@ -74,8 +78,9 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 	 */
 	public static DataLayouter<IOException> 
 	getWriterDataLayouter(java.io.Writer writer,int lineWidth,int indentation) {
-		return new DataLayouter<IOException>(new WriterBackend(writer,lineWidth)
-		,indentation);
+		return new DataLayouter<IOException>(
+				   new WriterBackend(writer,lineWidth),
+				   indentation);
 	}
 
 	// DATA PRINTING METHODS ----------------------------------------
@@ -200,6 +205,14 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 		return this;
 	}
 
+	// OVERRIDES OF INHERITED METHODS --------------------------------------
+
+	/* The point here is the covariant refinement of the return types
+	 * so that it remains possible to say l.beginC().print(...).brk(...)
+	 * even for a DataLayouter.  If only Java had a self-type we 
+	 * could declare as return type for these mehtods...
+	 */
+	
 	@Override
 	public DataLayouter<Exc> begin(boolean consistent, int indent) {
 		super.begin(consistent, indent);
