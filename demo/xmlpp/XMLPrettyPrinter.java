@@ -211,6 +211,10 @@ public class XMLPrettyPrinter extends DefaultHandler {
 	}
 
 	public static void main(String[] args) {
+		if (args.length!=1) {
+			System.err.println("usage: java xmlpp.XMLPrettyPrinter input.xml");
+			System.exit(1);
+		}
 		try {
             XMLPrettyPrinter xpp = new XMLPrettyPrinter(System.out);
             xpp.process(args[0]);
