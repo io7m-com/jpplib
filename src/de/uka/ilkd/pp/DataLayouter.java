@@ -97,22 +97,27 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 	// DATA PRINTING METHODS ----------------------------------------
 
 	/** Print <code>o</code> to this DataLayouter.
-	 * Figures out the type of <code>o</code> and delgates
-	 * to one of the specialized printing methods.
+     * If <code>o</code> is an instance of {@link PrettyPrintable},
+     * it is printed using its <code>prettyPrint</code> method.
+     * Otherwise, if <code>o</code> a is a collection, and array,
+     * or a map, it is printed as descibed in the methods
+     * {@link #print(Collection)}, {@link #printArray(Object)},
+     * and {@link #print(Map)}, respectively.  If everything else
+     * fails, <code>o.toString()</code> is used.
 	 * 
 	 * @param o
 	 *            the object to be pretty printed
 	 */
 	public DataLayouter<Exc> print(Object o) throws Exc {
-		if (o instanceof Collection<?>) {
+		if (o instanceof PrettyPrintable) {
+			((PrettyPrintable) o).prettyPrint(this);
+			return this;
+		} else if (o instanceof Collection<?>) {
 			return print((Collection<?>) o);
 		} else if (o instanceof Map<?, ?>) {
 			return print((Map<?, ?>) o);
 		} else if (o.getClass().isArray()) {
 			return printArray(o);		
-		} else if (o instanceof PrettyPrintable) {
-			((PrettyPrintable) o).prettyPrint(this);
-			return this;
 		} else {
 			return print(String.valueOf(o));
 		}
@@ -147,8 +152,8 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 		return this;
 	}
 
-	/** Pretty prints an array of reference or primitive elements.
-	 * The format is the same as for collections.
+	/** Print an array of reference or primitive elements.
+	 * The produced layout is the same as for collections.
 	 * 
 	 * @param o an object, has to be an array!
 	 */
@@ -170,14 +175,8 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 	 *  key3=val3]
 	 * </pre>
 	 * otherwise.  If values don't fit on one line, the
-	 * key-value pairs will also be spread over two lines, e.g.
-	 * <pre>
-	 * {key1=val1,
-	 *  key2=
-	 *    [long,
-	 *     long,
-	 *     value],
-	 *  key3=val3]
+	 * key-value pairs will also be spread over two lines, as
+	 * indicated for {@link #printEntry(java.util.Map.Entry)}.
 	 * </pre>
 	 */
 	public DataLayouter<Exc> print(Map<?, ?> m) throws Exc {
