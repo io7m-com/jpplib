@@ -1,9 +1,10 @@
-This is the Java Pretty Printer Library (jpplib)
+This is the Java™ Pretty Printer Library (jpplib)
 http://jpplib.sourceforge.net/
 
-It is distributed under the GNU Public License, see
-the file LICENSE.  Source code can be accessed via SVN
-at sourceforge.net
+It is distributed under the GNU General Public License, 
+see the file LICENSE.  Source code can be obtaines by 
+downloading one of the jpplib-src-* files from 
+Sourceforge.net or via anonymous SVN access.
 
 This archive contains the following files:
 

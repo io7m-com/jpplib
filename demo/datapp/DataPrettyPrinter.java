@@ -1,4 +1,4 @@
-//This file is part of the Java Pretty Printer Library (JPPlib)
+//This file is part of the Java™ Pretty Printer Library (JPPlib)
 //Copyright (C) 2007 Martin Giese
 
 //This program is free software: you can redistribute it and/or modify
@@ -32,216 +32,48 @@ import java.util.*;
 public class DataPrettyPrinter {
 
 	/** The maximum line width */
-	public final int DEFAULT_LINE_WIDTH = 80;
+	public static final int DEFAULT_LINE_WIDTH = 80;
 
 	/** The indentation, in particular for Map entries. */
-	public final int DEFAULT_INDENTATION = 2;
-
-	/** The layouter used for pretty printing. */
-	private Layouter<NoExceptions> out;
-
-	/** The backend where the output can be collected */
-	private StringBackend back = null;
-
-	/** Construct a DataPrettyPrinter with given line width and indentation.*/
-	private DataPrettyPrinter() {
-		back = new StringBackend(DEFAULT_LINE_WIDTH);
-		out = new Layouter<NoExceptions>(back, DEFAULT_INDENTATION);
-	}
-
-	/** Finalize printing. */
-	private void close() {
-		out.close();
-	}
-	
-	/** Return the string printed to the backend. */
-	private String getString() {
-		return back.getString();
-	}
+	public static final int DEFAULT_INDENTATION = 2;
 
 	/**
-	 * Pretty print an object according to its type. Arrays, collections and
-	 * maps recieve special handling. The format for collections and maps is as
-	 * described in the Collection Framework, but with possible insertion of
-	 * line breaks and indentation.  Arrays are printed like lists.
-	 * 
-	 * <p>
-	 * Objects that implement the {@link PrettyPrintable} interface are printed
-	 * using their prettyPrint method. Any other objects are printed using their
-	 * standard String representation.
-	 * 
-	 * <h4>Layout for container types</h4>
-	 * A collection ({@link java.util.List} or {@link java.util.Set}) is printed as
-	 * <pre>
-	 * [xxx, yyy, zzz]
-	 * </pre>
-	 * if it fits on one line, and as
-	 * <pre>
-	 * [xxx,
-	 *  yyy,
-	 *  zzz]
-	 * </pre>
-	 * otherwise.  The same format is used for arrays.
-	 * 
-	 * <p>A {@link java.util.Map} is printed as
-	 * <pre>
-	 * {k1=v1, k2=v2, k3=v3]
-	 * </pre>
-	 * if it fits on one line, and as
-	 * <pre>
-	 * {key1=val1,
-	 *  key2=val2,
-	 *  key3=val3]
-	 * </pre>
-	 * otherwise.  If values don't fit on one line, the
-	 * key-value pairs will also be spread over two lines, e.g.
-	 * <pre>
-	 * {key1=val1,
-	 *  key2=
-	 *    [long,
-	 *     long,
-	 *     value],
-	 *  key3=val3]
-	 * </pre>
-	 * This is to prevent long keys from adding too much indentation.
-	 *
-	 * <p> 
+	 * Pretty print an object according to its type. See the
+	 * documentation of {@link DataLayouter#print(Object)} for a
+	 * desciption of the layout chosen for various data types.
 	 * 
 	 * @param o
 	 *            the object to be pretty printed
 	 * @return the pretty-printed String representation of <code>o</code>
 	 */
 	public static String prettyPrint(Object o) {
-		DataPrettyPrinter dpp = new DataPrettyPrinter();
-		dpp.prettyPrintObject(o);
-		dpp.close();
-		return dpp.getString();
+		StringBackend back = new StringBackend(DEFAULT_LINE_WIDTH);
+		DataLayouter<NoExceptions> out = new DataLayouter<NoExceptions>(back, DEFAULT_INDENTATION);
+		out.print(o);
+		out.close();
+		return back.getString();
 	}
 	
-	/** Print <code>o</code> to this object's Layouter.
-	 * Figures out the type of <code>o</code> and delgates
-	 * to one of the specialized printing methods.
-	 * 
-	 * @param o
-	 *            the object to be pretty printed
-	 */
-	private void prettyPrintObject(Object o) {
-		if (o instanceof Collection<?>) {
-			prettyPrintCollection((Collection<?>) o);
-		} else if (o instanceof Map<?, ?>) {
-			prettyPrintMap((Map<?, ?>) o);
-		} else if (o.getClass().isArray()) {
-			prettyPrintArray(o);		
-		} else if (o instanceof PrettyPrintable) {
-			((PrettyPrintable) o).prettyPrint(out);
-		} else {
-			prettyPrintDefault(o);
-		}
-	}
-
-	/** Print a collection.
-	 * This is printed as
-	 * <pre>
-	 * [xxx, yyy, zzz]
-	 * </pre>
-	 * if it fits on one line, and as
-	 * <pre>
-	 * [xxx,
-	 *  yyy,
-	 *  zzz]
-	 * </pre>
-	 * otherwise.
-	 * 
-	 * @param c A collection
-	 */
-	private void prettyPrintCollection(Collection<?> c) {
-		out.print("[").beginC(0);
-		boolean first = true;
-		for (Object o : c) {
-			if (!first) {
-				out.print(",").brk(1, 0);
-			}
-			prettyPrintObject(o);
-			first = false;
-		}
-		out.print("]").end();
-	}
-
-	/** Pretty prints an array og reference or primitive elements.
-	 * The format is the same as for collections.
-	 * 
-	 * @param o an object, has to be an array!
-	 */
-	private void prettyPrintArray(Object o) {
-		Object[] boxed = BoxArrays.boxArray(o);
-		prettyPrintCollection(Arrays.asList(boxed));
+	/** Recursively consruct a tree with given arity and depth. */
+	private static Tree<String> createTree(int arity,int depth) {
+		return createTree("root",arity,depth);
 	}
 	
-	/** Print a map.
-	 * This is printed as
-	 * <pre>
-	 * {k1=v1, k2=v2, k3=v3]
-	 * </pre>
-	 * if it fits on one line, and as
-	 * <pre>
-	 * {key1=val1,
-	 *  key2=val2,
-	 *  key3=val3]
-	 * </pre>
-	 * otherwise.  If values don't fit on one line, the
-	 * key-value pairs will also be spread over two lines, e.g.
-	 * <pre>
-	 * {key1=val1,
-	 *  key2=
-	 *    [long,
-	 *     long,
-	 *     value],
-	 *  key3=val3]
-	 * </pre>
-	 */
-	private void prettyPrintMap(Map<?, ?> m) {
-		out.print("{").beginC(0);
-		boolean first = true;
-		for (Map.Entry<?, ?> e : m.entrySet()) {
-			if (!first) {
-				out.print(",").brk(1, 0);
+	private static Tree<String> createTree(String prefix,int arity,int depth) {
+		Tree<String> result = new Tree<String>(prefix);
+		if (depth>0) {
+			for (int j=0;j<arity;j++) {
+				result.addChild(createTree(prefix+"."+(j+1),arity,depth-1));
 			}
-			prettyPrintEntry(e);
-			first = false;
 		}
-		out.print("}").end();
+		return result;
 	}
-
-	/** Print a map entry.
-	 * This is printed as
-	 * <pre>
-	 * key=val
-	 * </pre>
-	 * if it fits on one line, and as
-	 * <pre>
-	 * key=
-	 *   val
-	 * </pre>
-	 * otherwise.  This is mailny to prevent key from adding too
-	 * much indentation.
-	 */
-	private void prettyPrintEntry(Map.Entry<?, ?> e) {
-		out.beginC();
-		prettyPrintObject(e.getKey());
-		out.print("=").brk(0, 0);
-		prettyPrintObject(e.getValue());
-		out.end();
-	}
-
-	/** Pretty print a value according to its standard
-	 * string representation.
+	
+	/** Show of functionality of DataLayouter.  Constructs
+	 * and prints a couple of data objects.
 	 * 
-	 * @param o the object to print
+	 * @param args Command line arguments, ignored
 	 */
-	private void prettyPrintDefault(Object o) {
-		out.print(String.valueOf(o));
-	}
-
 	public static void main(String[] args) {
 		System.out.println("A short list\n");
 		List imsevimse = Arrays.asList(new String[] { "imse", "vimse",
@@ -262,7 +94,7 @@ public class DataPrettyPrinter {
 		System.out.println("\nThe System environment\n");
 		System.out.println(prettyPrint(System.getenv()));
 
-		System.out.println("\nA list of maps from Strings to stuff");
+		System.out.println("\nA list of maps from Strings to stuff\n");
 		List<Map<String, Object>> l = new ArrayList<Map<String, Object>>();
 		for (int n = 1; n <= 15; n++) {
 			Map<String, Object> m = new HashMap<String, Object>();
@@ -276,5 +108,9 @@ public class DataPrettyPrinter {
 			l.add(m);
 		}
 		System.out.println(prettyPrint(l));
+
+		System.out.println("\nA tree\n");
+		Tree<String> t = createTree(2,5);
+		System.out.println(prettyPrint(t));
 	}
 }

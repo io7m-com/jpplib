@@ -1,4 +1,4 @@
-//This file is part of the Java Pretty Printer Library (JPPlib)
+//This file is part of the Java™ Pretty Printer Library (JPPlib)
 //Copyright (C) 2007 Martin Giese
 
 //This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,11 @@
 
 package datapp;
 
-import de.uka.ilkd.pp.*;
-
 /** An interface for objects that can pretty print themselves.*/
 public interface PrettyPrintable {
 	/** Pretty prints <code>this</code> to the 
-	 * {@link de.uka.ilkd.pp.Layouter} <code>l</code>.
+	 * {@link de.uka.ilkd.pp.DataLayouter} <code>l</code>.
 	 * Closes any blocks it opens.
 	 */ 
-	public void prettyPrint(Layouter l);
+	public <Exc extends Exception> void prettyPrint(DataLayouter<Exc> l) throws Exc;
 }
