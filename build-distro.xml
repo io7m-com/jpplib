@@ -56,7 +56,7 @@
 				 classpathref="JUnit 3.8.1.libraryclasspath"
    			     use="true">
    			<fileset dir="src" id="id">
-    			<exclude name="**/TestLayouter.java"/>
+    			<exclude name="**/Test**.java"/>
     			<exclude name="**/package.html"/>
 			</fileset>
    			<header><![CDATA[<h1>Java&trade; Pretty Printer Library v${jpplib.version}</h1>]]></header>
@@ -68,7 +68,7 @@
 					 classpathref="JUnit 3.8.1.libraryclasspath"
 	   			     use="true">
 	   			<fileset dir="src" id="id">
-	    			<exclude name="**/TestLayouter.java"/>
+	    			<exclude name="**/Test**.java"/>
 	    			<exclude name="**/package.html"/>
 				</fileset>
 	   			<header><![CDATA[<h1>Java&trade; Pretty Printer Library v${jpplib.version}</h1>]]></header>
