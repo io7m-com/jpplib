@@ -14,11 +14,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package datapp;
-
-import de.uka.ilkd.pp.Layouter;
-import de.uka.ilkd.pp.Backend;
-import de.uka.ilkd.pp.WriterBackend;
+package de.uka.ilkd.pp;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,22 +22,37 @@ import java.util.Collection;
 import java.util.Map;
 
 /** An extension of {@link de.uka.ilkd.pp.Layouter} to print
- * Java data structures.  There is a {@link #print(Object)} method
+ * arbitrary Java data.  There is a {@link #print(Object)} method
  * that prints objects according to their type.  In particular,
  * there are special layouts for (nested) collections, maps, and
  * arrays.  Classes implementing the interface {@link PrettyPrintable}
  * provide their own method for printing themselves to a DataLayouter.
  * 
- * <b>TODO</b>: if this proves to work nicely, maybe it should be moved 
- * to the de.uka.ilkd.pp package, along with the PrettyPrintable
- * interface.
+ * <p>Like most methods of {@link Layouter}, the methods of this
+ * class return <code>this</code>, so calls can be sequenced as in
+ * <code>l.beginC().print(...).brk(...)</code>.
  * 
- * @author mgiese
+ * <p>The intended main use of this class is to produce more readable
+ * debugging output than what <code>System.err.println()</code> would
+ * give, or for data output that should be human-readable.  It produces
+ * standard representations of data, like {@link Object#toString()}.
+ * Application-specific types will usually wish to define their own
+ * pretty printing, using the methods of {@link Layouter}.
+ * 
+ * @author Martin Giese
  *
- * @param <Exc> The type of exceptions thrown by the backend and passed through
+ * @param <Exc> The type of exceptions that might be thrown by the backend.
  */
 public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 
+	/**
+	 * Construts a newly allocated DataLayouter which will send output to
+	 * the given {@link Backend} and has the given default indentation.
+	 *
+	 * @param back the Backend
+	 * @param indentation the default indentation
+	 *
+	 */
 	public DataLayouter(Backend<Exc> back,int indentation) {
 		super(back, indentation);
 	}

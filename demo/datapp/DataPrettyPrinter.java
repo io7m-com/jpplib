@@ -17,6 +17,7 @@
 package datapp;
 
 import de.uka.ilkd.pp.*;
+
 import java.util.*;
 
 /** Utility class to pretty-print arbitrary objects.
@@ -26,7 +27,7 @@ import java.util.*;
  * layouts for collections, arrays, and maps.  See the 
  * documentation of that method for details.
  * 
- * @author mgiese
+ * @author Martin Giese
  *
  */
 public class DataPrettyPrinter {

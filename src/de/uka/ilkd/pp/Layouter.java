@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * This class pretty-prints information using line breaks and
- * indentation.  For instance, it can be used to print
+ * Pretty-print information formatted using line breaks and indentation.  
+ * For instance, this class can be used to print
  * <pre>
  *   while (i>0) {
  *     i--;

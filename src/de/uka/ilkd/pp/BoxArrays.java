@@ -14,7 +14,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package datapp;
+package de.uka.ilkd.pp;
 
 /** A utility class to box all elements of an array. 
  * Java's autoboxing applies only to primitive types, not
@@ -27,10 +27,10 @@ package datapp;
  * arbitrary array, passed in as an <code>Object</code>, 
  * using reflection to find out the element type.
  * 
- * @author mgiese
+ * @author Martin Giese
  *
  */
-public class BoxArrays {
+class BoxArrays {
 	public static Boolean[] boxPrimArray(boolean[] a) {
 		Boolean[] result = new Boolean[a.length];
 		for(int i=0;i<a.length;i++) {
