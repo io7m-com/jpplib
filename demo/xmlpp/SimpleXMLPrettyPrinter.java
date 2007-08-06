@@ -52,7 +52,7 @@ import de.uka.ilkd.pp.Layouter;
  * @author Martin Giese
  *
  */
-public class XMLPrettyPrinter extends DefaultHandler {
+public class SimpleXMLPrettyPrinter extends DefaultHandler {
  
 	public static final int INDENTATION = 3;
 	
@@ -61,7 +61,7 @@ public class XMLPrettyPrinter extends DefaultHandler {
 	private boolean insertBreak;
 	private boolean lastSawCharacters = false;
 	
-	public XMLPrettyPrinter(PrintStream out) {
+	public SimpleXMLPrettyPrinter(PrintStream out) {
 		this.out = out;
 		pp = Layouter.getWriterLayouter(new BufferedWriter(new OutputStreamWriter(this.out)));
 	}
@@ -216,7 +216,7 @@ public class XMLPrettyPrinter extends DefaultHandler {
 			System.exit(1);
 		}
 		try {
-            XMLPrettyPrinter xpp = new XMLPrettyPrinter(System.out);
+            SimpleXMLPrettyPrinter xpp = new SimpleXMLPrettyPrinter(System.out);
             xpp.process(args[0]);
         }
         catch (Throwable t) {
