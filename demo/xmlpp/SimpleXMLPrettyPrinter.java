@@ -31,12 +31,14 @@ import org.xml.sax.helpers.ParserAdapter;
 
 import de.uka.ilkd.pp.Layouter;
 
-/** Pretty-prints outline of an XML document.
+/** Pretty-prints an XML document.
  * This class is a demo for the JPPLib classes.  It reads
- * an XML file using SAX and pretty-prints its outline,
- * i.e. just the start and end tags.
+ * an XML file using SAX and pretty-prints it to System.out.
+ * Some amount of care is taken regarding quoting, but
+ * there are probably some mistakes.  The main point here is to show
+ * the use of JPPLib.
  * 
- * <p>The Layout is like
+ * <p>The layout of elements is like
  * <pre>
  * &lt;doc&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/doc&gt;
  * </pre>
@@ -49,6 +51,8 @@ import de.uka.ilkd.pp.Layouter;
  * &lt;/doc&gt;
  * </pre>
  * 
+ * Line breaks are also inserted in between attributes if tags get too large.
+ * 
  * @author Martin Giese
  *
  */
@@ -57,8 +61,23 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 	public static final int INDENTATION = 3;
 	
 	private PrintStream out;
+	
 	private Layouter<java.io.IOException> pp;
+
+	/** A call to break is required before printing
+	 * the next item.  This is needed because the call to
+	 * {@link de.uka.ilkd.pp.Layouter#brk(int, int)} needs to say how
+	 * much indentation is required.  If the next element is an end tag,
+	 * we need to outdent.
+	 */
 	private boolean insertBreak;
+
+	/** The previous SAX event was a call to
+	 * {@link #characters(char[], int, int)}. This is needed because
+	 * SAX might deliver character data in small chunks, which we want 
+	 * to print within a single (inconsistent) block.  The first invocation
+	 * of characters will open the block, and set this flag.  Any non-character
+	 * event will first check this flag, and close the block if necessary. */
 	private boolean lastSawCharacters = false;
 	
 	public SimpleXMLPrettyPrinter(PrintStream out) {
@@ -94,7 +113,8 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 			throw new SAXException(e);
 		}			
 	}
-
+	
+	/** Replace critical characters by XML entities. */
 	private String quoteCharacterData(char[] ch, int start, int length) {
 		StringBuilder sb = new StringBuilder();
 		for(int i=start;i<start+length;i++) {
@@ -116,7 +136,8 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 		}
 		return sb.toString();
 	}
-
+	
+	/** If a characters-block is still open, close it. */
 	private void wrapUpCharacters() 
 	throws IOException {
 		if (lastSawCharacters) {
@@ -144,7 +165,9 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 			throw new SAXException(e);
 		}
 	}
-
+	
+	/** Pretty print attributes of an element. Line breaks are inserted between 
+	 * attributes if necessary, but currently not between name and value of attributes. */
 	public void printAttributes(Attributes atts)
 	throws IOException {
 		if (atts.getLength()>0) {
@@ -160,10 +183,12 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 		}
 	}
 	
+	/** Perform entity-quoting of quotes within attribute values. */
 	public String quoteAttrValue(String s) {
 		return "\""
 			+s.replaceAll("\"", "&quot;")
-			  .replaceAll("\'", "&apos;")+"\"";
+			  .replaceAll("\'", "&apos;")
+			  .replaceAll("&", "&amp;")+"\"";
 	}
 	
 	@Override

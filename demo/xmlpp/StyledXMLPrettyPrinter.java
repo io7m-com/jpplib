@@ -16,7 +16,7 @@
 
 package xmlpp;
 
-import java.io.IOException;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -29,17 +29,21 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.ParserAdapter;
 
 import de.uka.ilkd.pp.Layouter;
 import de.uka.ilkd.pp.NoExceptions;
 
-/** Pretty-prints outline of an XML document.
+/** Displays an XML document in a window.
  * This class is a demo for the JPPLib classes.  It reads
- * an XML file using SAX and pretty-prints its outline,
- * i.e. just the start and end tags.
+ * an XML file using SAX and displays a pretty printed output
+ * in a JTextPane, with some colouring.
+ * Some amount of care is taken regarding quoting, but
+ * there are probably some mistakes.  The main point here is to show
+ * the use of JPPLib.  In particular, the colour information is
+ * passed through to the {@link javax.swing.text.StyledDocument} using the 
+ * {@link de.uka.ilkd.pp.Layouter#mark(Object)} method.
  * 
  * <p>The Layout is like
  * <pre>
@@ -54,15 +58,33 @@ import de.uka.ilkd.pp.NoExceptions;
  * &lt;/doc&gt;
  * </pre>
  * 
+ * Line breaks are also inserted in between attributes if tags get too large.
+ * 
  * @author Martin Giese
  *
  */
-public class FontifiedXMLPrettyPrinter extends DefaultHandler {
+public class StyledXMLPrettyPrinter extends DefaultHandler {
  
+	private static final Font FONT = new java.awt.Font("Monospaced",0,12);
+	
 	public static final int INDENTATION = 3;
 	
 	private Layouter<NoExceptions> pp;
+
+	/** A call to break is required before printing
+	 * the next item.  This is needed because the call to
+	 * {@link de.uka.ilkd.pp.Layouter#brk(int, int)} needs to say how
+	 * much indentation is required.  If the next element is an end tag,
+	 * we need to outdent.
+	 */
 	private boolean insertBreak;
+	
+	/** The previous SAX event was a call to
+	 * {@link #characters(char[], int, int)}. This is needed because
+	 * SAX might deliver character data in small chunks, which we want 
+	 * to print within a single (inconsistent) block.  The first invocation
+	 * of characters will open the block, and set this flag.  Any non-character
+	 * event will first check this flag, and close the block if necessary. */
 	private boolean lastSawCharacters = false;
 	
 	public static final AttributeSet ATTR_EMPTY;
@@ -84,37 +106,35 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 		ATTR_GRAY = as;
 	}
 	
-	public FontifiedXMLPrettyPrinter(StyledDocumentBackend back) {
+	public StyledXMLPrettyPrinter(StyledDocumentBackend back) {
 		pp = new Layouter<NoExceptions>(back,INDENTATION);
 	}
 
 	@Override
-	public void characters(char[] ch, int start, int length) 
-	throws SAXException {
-
-			// collect words
-			String quotedText = quoteCharacterData(ch, start, length).trim();
-			String[] words=quotedText.split("\\s+");
-			// if last element was arleady characters, continue with a
-			// separating brk, otherwise, start new inconsisten block.
-			if (lastSawCharacters) {
+	public void characters(char[] ch, int start, int length) {
+		// collect words
+		String quotedText = quoteCharacterData(ch, start, length).trim();
+		String[] words=quotedText.split("\\s+");
+		// if last element was arleady characters, continue with a
+		// separating brk, otherwise, start new inconsisten block.
+		if (lastSawCharacters) {
+			pp.brk(1,0);
+		} else {
+			pp.beginI(0);
+		}
+		// output words separated by blanks
+		boolean brk = false;
+		for(String word:words) {
+			if (brk) {
 				pp.brk(1,0);
-			} else {
-				pp.beginI(0);
 			}
-			// output words separated by blanks
-			boolean brk = false;
-			for(String word:words) {
-				if (brk) {
-					pp.brk(1,0);
-				}
-				pp.print(word);
-				brk = true;
-			}
-			lastSawCharacters = true;
-
+			pp.print(word);
+			brk = true;
+		}
+		lastSawCharacters = true;
 	}
 
+	/** Replace critical characters by XML entities. */
 	private String quoteCharacterData(char[] ch, int start, int length) {
 		StringBuilder sb = new StringBuilder();
 		for(int i=start;i<start+length;i++) {
@@ -137,8 +157,8 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 		return sb.toString();
 	}
 
-	private void wrapUpCharacters() 
-	throws IOException {
+	/** If a characters-block is still open, close it. */
+	private void wrapUpCharacters() {
 		if (lastSawCharacters) {
 			pp.end();
 			lastSawCharacters = false;
@@ -149,26 +169,22 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 	public void startElement(String namespace, 
 			String localName, 
 			String qName,
-			Attributes atts) 
-	throws SAXException {
-		try {
-			wrapUpCharacters();
-			if (insertBreak) {
-				pp.brk(0,0);
-			}
-			pp.mark(ATTR_BLUE);
-			pp.beginC(INDENTATION).print("<"+localName);
-			printAttributes(atts);
-			pp.print(">");
-			pp.mark(ATTR_EMPTY);
-			insertBreak = true;
-		} catch (IOException e) {
-			throw new SAXException(e);
+			Attributes atts) {
+		wrapUpCharacters();
+		if (insertBreak) {
+			pp.brk(0,0);
 		}
+		pp.mark(ATTR_BLUE);
+		pp.beginC(INDENTATION).print("<"+localName);
+		printAttributes(atts);
+		pp.print(">");
+		pp.mark(ATTR_EMPTY);
+		insertBreak = true;
 	}
 
-	public void printAttributes(Attributes atts)
-	throws IOException {
+	/** Pretty print attributes of an element. Line breaks are inserted between 
+	 * attributes if necessary, but currently not between name and value of attributes. */
+	public void printAttributes(Attributes atts) {
 		if (atts.getLength()>0) {
 			pp.print(" ").beginC(0);
 			for (int i=0;i<atts.getLength();i++) {
@@ -185,75 +201,70 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 		}
 	}
 	
+	/** Perform entity-quoting of quotes within attribute values. */
 	public String quoteAttrValue(String s) {
 		return "\""
 			+s.replaceAll("\"", "&quot;")
-			  .replaceAll("\'", "&apos;")+"\"";
+			  .replaceAll("\'", "&apos;")
+			  .replaceAll("&", "&amp;")+"\"";
 	}
 	
 	@Override
-	public void endElement(String uri, String localName, String qName) 
-	throws SAXException {
-		try {
-			wrapUpCharacters();
-			if (insertBreak) {
-				pp.brk(0,-INDENTATION);
-			}
-			pp.mark(ATTR_BLUE);
-			pp.print("</"+localName+">").mark(ATTR_EMPTY).end();
-			insertBreak = true;
-		} catch (IOException e) {
-			throw new SAXException(e);
+	public void endElement(String uri, String localName, String qName) {
+		wrapUpCharacters();
+		if (insertBreak) {
+			pp.brk(0,-INDENTATION);
 		}
+		pp.mark(ATTR_BLUE);
+		pp.print("</"+localName+">").mark(ATTR_EMPTY).end();
+		insertBreak = true;
 	}
 
 	@Override
-	public void processingInstruction(String target, String data) 
-	throws SAXException {
+	public void processingInstruction(String target, String data) {
+		wrapUpCharacters();
+		if (insertBreak) {
+			pp.brk(0,0);
+		}
 		pp.mark(ATTR_GRAY);	
 		pp.print("<?"+target+" "+data+"?>").mark(ATTR_EMPTY).nl();
 	}
 	
 	public void process(String urlString) 
 	throws Exception {
-		SAXParserFactory spf = 
-			SAXParserFactory.newInstance();
-		SAXParser sp = spf.newSAXParser();
-		ParserAdapter pa = 
-			new ParserAdapter(sp.getParser());
+		SAXParser sp = SAXParserFactory.newInstance().newSAXParser();
+		ParserAdapter pa = new ParserAdapter(sp.getParser());
 		pa.setContentHandler(this);
-        pp.beginC(0);
-        pp.mark(ATTR_GRAY).print("<?xml version=\"1.0\"?>").mark(ATTR_EMPTY).nl();
+        pp.beginC(0).mark(ATTR_GRAY).print("<?xml version=\"1.0\"?>");
+        pp.mark(ATTR_EMPTY).nl();
         insertBreak = false;
 		pa.parse(urlString);
+		wrapUpCharacters();
 		if (insertBreak) {
 			pp.brk(0,0);
 		}
-		wrapUpCharacters();
 		pp.end().close();
 	}
 
     public static void createAndShowGUI(String input) {
     	try {
-    		JFrame frame = new JFrame(input);
+    		final JFrame frame = new JFrame(input);
     		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    		StyledDocumentBackend output = new StyledDocumentBackend(80);
-    		JTextPane textPane = new JTextPane(output.getDocument());
-    		textPane.setFont(new java.awt.Font("Monospaced",0,12));
+    		StyledDocumentBackend back = new StyledDocumentBackend(80);
+    		final JTextPane textPane = new JTextPane(back.getDocument());
+    		textPane.setFont(FONT);
     		textPane.setEditable(false);
     		textPane.setMargin(new java.awt.Insets(5, 5, 5, 5));
-    		JScrollPane scrollPane = new JScrollPane(textPane);
-    		scrollPane.setPreferredSize(new java.awt.Dimension(200, 200));
-    		frame.getContentPane().add(scrollPane);
+    		frame.getContentPane().add(new JScrollPane(textPane));
 
-    		FontifiedXMLPrettyPrinter xpp = new FontifiedXMLPrettyPrinter(output);
+    		StyledXMLPrettyPrinter xpp = new StyledXMLPrettyPrinter(back);
     		xpp.process(input);
 
     		frame.pack();
     		frame.setVisible(true);
     	} catch (Exception e) {
-    		System.err.println(e);
+    		e.printStackTrace(System.err);
     		System.exit(1);
     	}
     }
@@ -264,7 +275,7 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 			System.exit(1);
 		}
 		final String input = args[0];
-		 javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		      public void run() {
 		        createAndShowGUI(input);
 		      }

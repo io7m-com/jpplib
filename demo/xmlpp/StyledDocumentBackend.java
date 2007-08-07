@@ -21,6 +21,16 @@ import de.uka.ilkd.pp.NoExceptions;
 
 import javax.swing.text.*;
 
+/** A {@link de.uka.ilkd.pp.Backend} which appends all output to a 
+ * {@link javax.swing.text.StyledDocument}.
+ * If the parameter to the {@link #mark(Object o)} 
+ * method is an instance of {@link javax.swing.text.AttributeSet}, following
+ * characters sent to {@link #print(String)} will be printed using these attributes.
+ * Initially, an empty set of attributes is used.
+ * 
+ * @author Martin Giese
+ *
+ */
 public class StyledDocumentBackend implements Backend<NoExceptions> {
 	protected StyledDocument out;
     protected int lineWidth;
@@ -65,7 +75,9 @@ public class StyledDocumentBackend implements Backend<NoExceptions> {
     	return;
     }
 
-    /** Gets called to record a <code>mark()</code> call in the input. */
+    /** Gets called to record a <code>mark()</code> call in the input. 
+     * If <code>o</code> is an instance of {@link javax.swing.text.AttributeSet},
+     * any further text is printed with these attributes. */
     public void mark(Object o) {
     	if (o instanceof AttributeSet) {
     		currentAttributes = (AttributeSet) o;
