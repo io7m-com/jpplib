@@ -26,64 +26,64 @@ public class StringBackend implements Backend<NoExceptions> {
     protected StringBuffer out;
     protected int initOutLength;
     protected int lineWidth;
-    
+
     /** Create a new StringBackend.  This will append all output to
      * the given StringBuffer <code>sb</code>.    */
     public StringBackend(StringBuffer sb,int lineWidth) {
-	this.lineWidth = lineWidth;
-	this.out = sb;
-	this.initOutLength = sb.length();
+    	this.lineWidth = lineWidth;
+    	this.out = sb;
+    	this.initOutLength = sb.length();
     }
 
     /** Create a new StringBackend.  This will accumulate output in
      * a fresh, private StringBuffer. */
     public StringBackend(int lineWidth) {
-	this(new StringBuffer(lineWidth),lineWidth);
+    	this(new StringBuffer(lineWidth),lineWidth);
     }
 
     /** Append a String <code>s</code> to the output.  <code>s</code> 
      * contains no newlines. */
     public void print(String s) {
-	out.append(s);
+    	out.append(s);
     }
 
     /** Start a new line. */
     public void newLine() {
-	out.append('\n');
+    	out.append('\n');
     }
 
     /** Closes this backend */
     public void close() {
-	return;
+    	return;
     }
 
     /** Flushes any buffered output */
     public void flush() {
-	return;
+    	return;
     }
 
     /** Gets called to record a <code>mark()</code> call in the input. */
     public void mark(Object o) {
-	return;
+    	return;
     }
 
     /** Returns the number of characters written through this backend.*/
     public int count() {
-	return out.length()-initOutLength;
+    	return out.length()-initOutLength;
     }
 
     /** Returns the available space per line */
     public int lineWidth() {
-	return lineWidth;
+    	return lineWidth;
     }
 
     /** Returns the space required to print the String <code>s</code> */
     public int measure(String s) {
-	return s.length();
+    	return s.length();
     }
 
     /** Returns the accumulated output */
     public String getString() {
-	return out.toString();
+    	return out.toString();
     }
 }

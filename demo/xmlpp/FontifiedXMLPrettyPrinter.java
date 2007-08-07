@@ -16,22 +16,25 @@
 
 package xmlpp;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import javax.swing.*;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.ParserAdapter;
 
-import de.uka.ilkd.pp.*;
+import de.uka.ilkd.pp.Layouter;
+import de.uka.ilkd.pp.NoExceptions;
 
 /** Pretty-prints outline of an XML document.
  * This class is a demo for the JPPLib classes.  It reads
@@ -62,7 +65,26 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 	private boolean insertBreak;
 	private boolean lastSawCharacters = false;
 	
-	public FontifiedXMLPrettyPrinter(StringBackend back) {
+	public static final AttributeSet ATTR_EMPTY;
+	public static final AttributeSet ATTR_BLUE;	
+	public static final AttributeSet ATTR_GREEN;	
+	public static final AttributeSet ATTR_GRAY;	
+
+	static {
+		MutableAttributeSet as;
+		ATTR_EMPTY = SimpleAttributeSet.EMPTY;
+		as = new SimpleAttributeSet();
+		StyleConstants.setForeground(as,java.awt.Color.BLUE);
+		ATTR_BLUE = as;
+		as = new SimpleAttributeSet();
+		StyleConstants.setForeground(as,java.awt.Color.GREEN);
+		ATTR_GREEN = as;
+		as = new SimpleAttributeSet();
+		StyleConstants.setForeground(as,java.awt.Color.GRAY);
+		ATTR_GRAY = as;
+	}
+	
+	public FontifiedXMLPrettyPrinter(StyledDocumentBackend back) {
 		pp = new Layouter<NoExceptions>(back,INDENTATION);
 	}
 
@@ -134,9 +156,11 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 			if (insertBreak) {
 				pp.brk(0,0);
 			}
+			pp.mark(ATTR_BLUE);
 			pp.beginC(INDENTATION).print("<"+localName);
 			printAttributes(atts);
 			pp.print(">");
+			pp.mark(ATTR_EMPTY);
 			insertBreak = true;
 		} catch (IOException e) {
 			throw new SAXException(e);
@@ -149,7 +173,10 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 			pp.print(" ").beginC(0);
 			for (int i=0;i<atts.getLength();i++) {
 				pp.print(atts.getLocalName(i)
-						+"="+quoteAttrValue(atts.getValue(i)));
+						+"=");
+				pp.mark(ATTR_GREEN);
+				pp.print(quoteAttrValue(atts.getValue(i)));
+				pp.mark(ATTR_EMPTY);
 				if (i!=atts.getLength()-1) {
 					pp.brk(1,0);
 				}
@@ -172,7 +199,8 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 			if (insertBreak) {
 				pp.brk(0,-INDENTATION);
 			}
-			pp.print("</"+localName+">").end();
+			pp.mark(ATTR_BLUE);
+			pp.print("</"+localName+">").mark(ATTR_EMPTY).end();
 			insertBreak = true;
 		} catch (IOException e) {
 			throw new SAXException(e);
@@ -182,9 +210,8 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 	@Override
 	public void processingInstruction(String target, String data) 
 	throws SAXException {
-
-			pp.print("<?"+target+" "+data+"?>").nl();
-
+		pp.mark(ATTR_GRAY);	
+		pp.print("<?"+target+" "+data+"?>").mark(ATTR_EMPTY).nl();
 	}
 	
 	public void process(String urlString) 
@@ -196,7 +223,7 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 			new ParserAdapter(sp.getParser());
 		pa.setContentHandler(this);
         pp.beginC(0);
-        pp.print("<?xml version=\"1.0\"?>").nl();
+        pp.mark(ATTR_GRAY).print("<?xml version=\"1.0\"?>").mark(ATTR_EMPTY).nl();
         insertBreak = false;
 		pa.parse(urlString);
 		if (insertBreak) {
@@ -211,7 +238,8 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
     		JFrame frame = new JFrame(input);
     		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    		JTextPane textPane = new JTextPane();
+    		StyledDocumentBackend output = new StyledDocumentBackend(80);
+    		JTextPane textPane = new JTextPane(output.getDocument());
     		textPane.setFont(new java.awt.Font("Monospaced",0,12));
     		textPane.setEditable(false);
     		textPane.setMargin(new java.awt.Insets(5, 5, 5, 5));
@@ -219,10 +247,8 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
     		scrollPane.setPreferredSize(new java.awt.Dimension(200, 200));
     		frame.getContentPane().add(scrollPane);
 
-    		StringBackend output = new StringBackend(80);
     		FontifiedXMLPrettyPrinter xpp = new FontifiedXMLPrettyPrinter(output);
     		xpp.process(input);
-    		textPane.setText(output.getString());
 
     		frame.pack();
     		frame.setVisible(true);
@@ -246,23 +272,5 @@ public class FontifiedXMLPrettyPrinter extends DefaultHandler {
 		
 		}
 
-	static final Object START_BOLD = new Object();
-	static final Object END_BOLD = new Object();
-	
-	static class FontifyStringBackend extends StringBackend {
 
-	    /** Create a new StringBackend.  This will accumulate output in
-	     * a fresh, private StringBuffer. */
-	    public FontifyStringBackend(int lineWidth) {
-		   super(lineWidth);
-	    }
-
-	    public void mark(Object o) {
-	    	if (o==START_BOLD) {
-	    		out.append("<b>");
-	    	} else if (o==END_BOLD) {
-	    		out.append("</b>");
-	    	}
-	    }
-	}
 }
