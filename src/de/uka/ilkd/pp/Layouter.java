@@ -300,7 +300,43 @@ public class Layouter<Exc extends Exception> {
 		return new Layouter<IOException>(new WriterBackend(writer,lineWidth)
 		,indentation);
 	}
+	
+	
+	/** Factory method for a Layouter with a {@link StringBackend}.
+	 * The line width is taken to be {@link #DEFAULT_LINE_WIDTH}, and the
+	 * default indentation {@link #DEFAULT_INDENTATION}. 
+	 *
+	 * @param sb the {@link java.lang.StringBuilder} the Backend is going to use
+	 */
+	public static Layouter<NoExceptions> 
+	getStringLayouter(StringBuilder sb) {
+		return getStringLayouter(sb,DEFAULT_LINE_WIDTH);
+	}
 
+	/** Factory method for a Layouter with a {@link StringBackend}.
+	 * The default indentation is taken from {@link #DEFAULT_INDENTATION}. 
+	 *
+	 * @param sb the {@link StringBuilder} the Backend is going to use
+	 * @param lineWidth the maximum lineWidth the Backend is going to use
+	 */
+	public static Layouter<NoExceptions> 
+	getStringLayouter(StringBuilder sb,int lineWidth) {
+		return getStringLayouter(sb,lineWidth,DEFAULT_INDENTATION);
+	}
+
+	/** Factory method for a Layouter with a {@link StringBackend}.
+	 *
+	 * @param sb the {@link StringBuilder} the Backend is going to use
+	 * @param lineWidth the maximum lineWidth the Backend is going to use
+	 * @param indentation the default indentation
+	 */
+	public static Layouter<NoExceptions> 
+	getStringLayouter(StringBuilder sb,int lineWidth,int indentation) {
+		return new Layouter<NoExceptions>(new StringBackend(sb,lineWidth)
+		,indentation);
+	}
+
+	
 	// PRIMITIVE STREAM OPERATIONS ------------------------------------
 
 	/** Output text material.  The string <code>s</code> should not

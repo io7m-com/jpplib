@@ -16,40 +16,78 @@
 
 package de.uka.ilkd.pp;
 
-/** A {@link Backend} which appends all output to a StringBuffer.
+/** A {@link Backend} which appends all output to a StringBuilder or
+ * StringBuffer.
  * The {@link #mark(Object o)} method does nothing in this
  * implementation.  There is a method {@link #count()} which returns
  * the number of characters written by this so far.  
  * The method {@link #getString()} gets the output written so far.
  */
 public class StringBackend implements Backend<NoExceptions> {
-    protected StringBuffer out;
-    protected int initOutLength;
+	/** The StringBuffer or StringBuilder output will be accumulated in.
+	 * Some of the implementations rely on this being either a StringBuilder
+	 * or StringBuffer, and all implementations in this class guarantee it.
+	 * If you subclass StringBackend, beware!
+	 */
+	protected Appendable out;
+	
+	/** The maximum width of lines to be written to this backend. */
     protected int lineWidth;
-
+    
+    /** The initial number of characters in <code>out</code>, used
+     * by the implementation of {@link #count()}.
+     */
+    protected int initOutLength;
+    
     /** Create a new StringBackend.  This will append all output to
-     * the given StringBuffer <code>sb</code>.    */
+     * the given StringBuilder <code>sb</code>.    */
+    public StringBackend(StringBuilder sb,int lineWidth) {
+    	this.lineWidth = lineWidth;
+    	this.out = sb;
+    	initOutLength = sb.length();
+    }
+
+    /**
+	 * Create a new StringBackend. This will append all output to the given
+	 * StringBuffer <code>sb</code>.
+	 * 
+	 * @deprecated consider using the constructor
+	 *             {@link #StringBackend(StringBuilder, int)}, as
+	 *             StringBuilders are faster, and multi-threaded access to
+	 *             <code>sb</code> is probably not going to work anyhow.
+	 */
     public StringBackend(StringBuffer sb,int lineWidth) {
     	this.lineWidth = lineWidth;
     	this.out = sb;
-    	this.initOutLength = sb.length();
+    	initOutLength = sb.length();
     }
 
     /** Create a new StringBackend.  This will accumulate output in
-     * a fresh, private StringBuffer. */
+     * a fresh, private StringBuilder. */
     public StringBackend(int lineWidth) {
-    	this(new StringBuffer(lineWidth),lineWidth);
+    	this(new StringBuilder(lineWidth),lineWidth);
     }
 
     /** Append a String <code>s</code> to the output.  <code>s</code> 
      * contains no newlines. */
     public void print(String s) {
-    	out.append(s);
+    	try {
+    		out.append(s);
+    	} catch (java.io.IOException e) {
+    		// Cannot happen, since out can only be a 
+    		// StringBuffer or StringBuilder
+    	}
     }
 
     /** Start a new line. */
     public void newLine() {
-    	out.append('\n');
+    	try {
+			    	out.append('\n');
+
+		} catch (java.io.IOException e) {
+    		// Cannot happen, since out can only be a 
+    		// StringBuffer or StringBuilder
+		}
     }
 
     /** Closes this backend */
@@ -69,9 +107,17 @@ public class StringBackend implements Backend<NoExceptions> {
 
     /** Returns the number of characters written through this backend.*/
     public int count() {
-    	return out.length()-initOutLength;
+    	if (out instanceof StringBuilder) {
+    		return ((StringBuilder)out).length()-initOutLength;
+    	} else if (out instanceof StringBuffer) {
+    		return ((StringBuffer)out).length()-initOutLength;    		
+    	} else {
+    		// Cannot happen, since out can only be a 
+    		// StringBuffer or StringBuilder
+    		return 0;
+        }
     }
-
+    
     /** Returns the available space per line */
     public int lineWidth() {
     	return lineWidth;
