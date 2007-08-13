@@ -90,7 +90,7 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 	throws SAXException {
 		try {
 			// collect words
-			String quotedText = quoteCharacterData(ch, start, length).trim();
+			String quotedText = XMLUtils.quoteCharacterData(ch, start, length).trim();
 			String[] words=quotedText.split("\\s+");
 			// if last element was arleady characters, continue with a
 			// separating brk, otherwise, start new inconsisten block.
@@ -114,28 +114,6 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 		}			
 	}
 	
-	/** Replace critical characters by XML entities. */
-	private String quoteCharacterData(char[] ch, int start, int length) {
-		StringBuilder sb = new StringBuilder();
-		for(int i=start;i<start+length;i++) {
-			char c;
-			switch (c=ch[i]) {
-			case '<':
-				sb.append("&lt;");
-				break;
-			case '>':
-				sb.append("&gt;");
-				break;
-			case '&':
-				sb.append("&amp;");
-				break;
-			default:
-				sb.append(c);
-			break;
-			}
-		}
-		return sb.toString();
-	}
 	
 	/** If a characters-block is still open, close it. */
 	private void wrapUpCharacters() 
@@ -174,7 +152,7 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 			pp.print(" ").beginC(0);
 			for (int i=0;i<atts.getLength();i++) {
 				pp.print(atts.getLocalName(i)
-						+"="+quoteAttrValue(atts.getValue(i)));
+						+"="+XMLUtils.quoteAttrValue(atts.getValue(i)));
 				if (i!=atts.getLength()-1) {
 					pp.brk(1,0);
 				}
@@ -183,13 +161,6 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 		}
 	}
 	
-	/** Perform entity-quoting of quotes within attribute values. */
-	public String quoteAttrValue(String s) {
-		return "\""
-			+s.replaceAll("\"", "&quot;")
-			  .replaceAll("\'", "&apos;")
-			  .replaceAll("&", "&amp;")+"\"";
-	}
 	
 	@Override
 	public void endElement(String uri, String localName, String qName) 
