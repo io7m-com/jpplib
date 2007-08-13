@@ -86,7 +86,7 @@ import java.util.StringTokenizer;
  * l.beginC(2).print("while (i>0) {").brk(1,0)
  *  .print("i--;").brk(1,0)
  *  .print("j++;").brk(1,-2)
- *  .print("{").end();
+ *  .print("}").end();
  * </pre>
  *
  * The call to {@link #beginC(int)} starts a consistent block,
