@@ -120,7 +120,7 @@ public class StyledXMLPrettyPrinter extends DefaultHandler {
 		if (lastSawCharacters) {
 			pp.brk(1,0);
 		} else {
-			pp.beginI(0);
+			pp.beginIInd(0);
 		}
 		// output words separated by blanks
 		boolean brk = false;

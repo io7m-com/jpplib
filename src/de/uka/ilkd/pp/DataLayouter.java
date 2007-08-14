@@ -224,11 +224,33 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 	 */
 	
 	@Override
+	public DataLayouter<Exc> begin(BreakConsistency consistent,
+								    IndentationBase fromPos, 
+								    int indent) {
+		super.begin(consistent, fromPos, indent);
+		return this;
+	}
+	
+	/**
+	 * @deprecated use {@link #begin(de.uka.ilkd.pp.Layouter.BreakConsistency, de.uka.ilkd.pp.Layouter.IndentationBase, int)}
+	 */
+	@Override
 	public DataLayouter<Exc> begin(boolean consistent, int indent) {
-		super.begin(consistent, indent);
+		return begin(consistent, true, indent);
+	}
+	
+	/**
+	 * @deprecated use {@link #begin(de.uka.ilkd.pp.Layouter.BreakConsistency, de.uka.ilkd.pp.Layouter.IndentationBase, int)}
+	 */
+	@Override
+	public DataLayouter<Exc> begin(boolean consistent, boolean fromPos, int indent) {
+		super.begin(consistent, fromPos, indent);
 		return this;
 	}
 
+	/**
+	 * @deprecated use {@link #begin(de.uka.ilkd.pp.Layouter.BreakConsistency, de.uka.ilkd.pp.Layouter.IndentationBase, int)}
+	 */
 	@Override
 	public DataLayouter<Exc> begin(boolean consistent) {
 		super.begin(consistent);
@@ -255,6 +277,30 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 
 	@Override
 	public DataLayouter<Exc> beginI(int indent) {
+		super.beginI(indent);
+		return this;
+	}
+
+	@Override
+	public DataLayouter<Exc> beginCInd() {
+		super.beginCInd();
+		return this;
+	}
+
+	@Override
+	public DataLayouter<Exc> beginCInd(int indent) {
+		super.beginCInd(indent);
+		return this;
+	}
+
+	@Override
+	public DataLayouter<Exc> beginIInd() {
+		super.beginI();
+		return this;
+	}
+
+	@Override
+	public DataLayouter<Exc> beginIInd(int indent) {
 		super.beginI(indent);
 		return this;
 	}
