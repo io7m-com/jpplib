@@ -30,7 +30,33 @@ import java.io.IOException;
 
 import org.w3c.dom.*;
 
-
+/** Pretty-prints an XML document.
+ * This class is a demo for the JPPLib classes.  It reads
+ * an XML file using DOM and pretty-prints it to System.out.
+ * Some amount of care is taken regarding quoting, but
+ * there are probably some mistakes.  The main point here is to show
+ * the use of JPPLib, in particular when used with active traversal
+ * of a data structure, as opposed to the event based implementation
+ * in {@link SimpleXMLPrettyPrinter}
+ * 
+ * <p>The layout of elements is like
+ * <pre>
+ * &lt;doc&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/doc&gt;
+ * </pre>
+ * as long as everything fits on one line.  Otherwise, elements
+ * are broken, and sub-elements are indented, e.g.
+ * <pre>
+ * &lt;doc&gt;
+ *     &lt;head&gt;&lt;/head&gt;
+ *     &lt;body&gt;&lt;/body&gt;
+ * &lt;/doc&gt;
+ * </pre>
+ * 
+ * Line breaks are also inserted in between attributes if tags get too large.
+ * 
+ * @author Martin Giese
+ *
+ */
 public class DOMXMLPrettyPrinter {
 
 	public static final int INDENTATION= 3;
@@ -65,77 +91,104 @@ public class DOMXMLPrettyPrinter {
 			prettyPrint(((Document)node).getDocumentElement() );
 			break;
 		case Node.ELEMENT_NODE: 
-			if (insertBreak) {
-				pp.brk(0,0);
-			}
-			pp.beginC(INDENTATION);
-			pp.print("<");
-			pp.print(node.getNodeName());
-			NamedNodeMap attrs = node.getAttributes();
-			for (int i = 0; i < attrs.getLength(); i++)
-			{
-				Node attr = attrs.item(i);
-				pp.print(" " + attr.getNodeName() + 
-						"=\"" + attr.getNodeValue() + 
-				"\"");
-			}
-			pp.print(">");
-
-			NodeList children = node.getChildNodes();
-			if (children != null)
-			{
-				int len = children.getLength();
-				for (int i = 0; i < len; i++) {
-					prettyPrint(children.item(i));
-				}
-			}
-
-			pp.brk(0,-INDENTATION);
-		    pp.print("</");
-		    pp.print(node.getNodeName());
-		    pp.print(">").end();
+			prettyPrintElement(node);
 			break;
 
 		case Node.ENTITY_REFERENCE_NODE: 
-			pp.print("&");
-			pp.print(node.getNodeName());
-			pp.print(";").nl();
+			prettyPrintEntityReference(node);
 			break;
 		case Node.CDATA_SECTION_NODE: 
-			pp.print("<![CDATA[");
-			pp.print(node.getNodeValue());
-			pp.print("]]>").nl();
+			prettyPrintCDATASection(node);
 			break;
 		case Node.TEXT_NODE: 
-			// collect words
-			String quotedText = node.getNodeValue().trim();
-			String[] words=quotedText.split("\\s+");
-			// if last element was arleady characters, continue with a
-			// separating brk, otherwise, start new inconsisten block.
-			pp.beginIInd(0);
-			// output words separated by blanks
-			boolean brk = false;
-			for(String word:words) {
-				if (brk) {
-					pp.brk(1,0);
-				}
-				pp.print(word);
-				brk = true;
-			}
-			pp.end();
+			prettyPrintText(node);
 			break;
 		case Node.PROCESSING_INSTRUCTION_NODE: 
-			pp.print("<?").nl();
-			pp.print(node.getNodeName());
-			String data = node.getNodeValue();
-			pp.print(" ");
-			pp.print(data);
-			pp.print("?>").nl();
+			prettyPrintProcessingInstruction(node);
 			break;
 		}
 		insertBreak = true;
 	}
+
+	private void prettyPrintElement(Node node) throws IOException {
+		if (insertBreak) {
+			pp.brk(0,0);
+		}
+		pp.beginC(INDENTATION);
+		pp.print("<");
+		pp.print(node.getNodeName());
+		prettyPrintAttributes(node.getAttributes());
+		pp.print(">");
 	
+		NodeList children = node.getChildNodes();
+		if (children != null)
+		{
+			int len = children.getLength();
+			for (int i = 0; i < len; i++) {
+				prettyPrint(children.item(i));
+			}
+		}
+	
+		pp.brk(0,-INDENTATION);
+		pp.print("</");
+		pp.print(node.getNodeName());
+		pp.print(">").end();
+	}
+
+	private void prettyPrintAttributes(NamedNodeMap attrs) throws IOException {
+		if (attrs.getLength()>0) {
+			pp.print(" ").beginC(0);
+			for (int i = 0; i < attrs.getLength(); i++)
+			{
+				Node attr = attrs.item(i);
+				pp.print(attr.getNodeName() + 
+						"=" + XMLUtils.quoteAttrValue(attr.getNodeValue()));
+				if (i!=attrs.getLength()-1) {
+					pp.brk(1,0);
+				}
+			}
+			pp.end();
+		}
+	}
+
+	private void prettyPrintEntityReference(Node node) throws IOException {
+		pp.print("&");
+		pp.print(node.getNodeName());
+		pp.print(";").nl();
+	}
+
+	private void prettyPrintCDATASection(Node node) throws IOException {
+		pp.print("<![CDATA[");
+		pp.print(node.getNodeValue());
+		pp.print("]]>").nl();
+	}
+
+	private void prettyPrintText(Node node) throws IOException {
+		// collect words
+		String quotedText = XMLUtils.quoteCharacterData(node.getNodeValue()).trim();
+		String[] words=quotedText.split("\\s+");
+		pp.beginIInd(0);
+		// output words separated by blanks
+		boolean brk = false;
+		for(String word:words) {
+			if (brk) {
+				pp.brk(1,0);
+			}
+			pp.print(word);
+			brk = true;
+		}
+		pp.end();
+	}
+
+	private void prettyPrintProcessingInstruction(Node node) throws IOException {
+		pp.print("<?").nl();
+		pp.print(node.getNodeName());
+		String data = node.getNodeValue();
+		pp.print(" ");
+		pp.print(data);
+		pp.print("?>").nl();
+	}
+
 	public static void main(String argv[])
     {
         if (argv.length != 1) {

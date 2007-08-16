@@ -42,12 +42,21 @@ public class XMLUtils {
 		return sb.toString();
 	}
 
+	/** Replace critical characters by XML entities. */
+	static String quoteCharacterData(String s) {
+		return s.replaceAll("&","&amp;")
+		         .replaceAll("<","&lt;")
+		         .replaceAll(">","&gt;");
+	}
+
+
 	/** Perform entity-quoting of quotes within attribute values. */
 	public static String quoteAttrValue(String s) {
 		return "\""
-			+s.replaceAll("\"", "&quot;")
+			+s.replaceAll("&", "&amp;")
+			  .replaceAll("\"", "&quot;")
 			  .replaceAll("\'", "&apos;")
-			  .replaceAll("&", "&amp;")+"\"";
+			    +"\"";
 	}
 
 }

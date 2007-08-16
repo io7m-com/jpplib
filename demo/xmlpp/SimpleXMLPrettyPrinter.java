@@ -36,7 +36,9 @@ import de.uka.ilkd.pp.Layouter;
  * an XML file using SAX and pretty-prints it to System.out.
  * Some amount of care is taken regarding quoting, but
  * there are probably some mistakes.  The main point here is to show
- * the use of JPPLib.
+ * the use of JPPLib, in particular when used together with an
+ * event-based presentation of the data, as opposed to active
+ * traversal as in {@link DOMXMLPrettyPrinter}
  * 
  * <p>The layout of elements is like
  * <pre>
@@ -208,7 +210,7 @@ public class SimpleXMLPrettyPrinter extends DefaultHandler {
 
 	public static void main(String[] args) {
 		if (args.length!=1) {
-			System.err.println("usage: java xmlpp.XMLPrettyPrinter input.xml");
+			System.err.println("usage: java xmlpp.SimpleXMLPrettyPrinter input.xml");
 			System.exit(1);
 		}
 		try {

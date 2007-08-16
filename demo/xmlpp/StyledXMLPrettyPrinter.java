@@ -240,7 +240,7 @@ public class StyledXMLPrettyPrinter extends DefaultHandler {
 
 	public static void main(String[] args) {
 		if (args.length!=1) {
-			System.err.println("usage: java xmlpp.XMLPrettyPrinter input.xml");
+			System.err.println("usage: java xmlpp.StyledXMLPrettyPrinter input.xml");
 			System.exit(1);
 		}
 		final String input = args[0];
