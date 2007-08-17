@@ -205,20 +205,8 @@ public class DOMXMLPrettyPrinter {
         	Document document = builder.parse( new File(argv[0]) );
         	
         	new DOMXMLPrettyPrinter(document).prettyPrint();
-        } catch (SAXException sxe) {
-           // Error generated during parsing
-           Exception  x = sxe;
-           if (sxe.getException() != null)
-               x = sxe.getException();
-           x.printStackTrace();
-
-        } catch (ParserConfigurationException pce) {
-           // Parser with specified options can't be built
-           pce.printStackTrace();
-
-        } catch (IOException ioe) {
-           // I/O error
-           ioe.printStackTrace();
+        } catch (Exception e) {
+           e.printStackTrace();
         }
     }
 }

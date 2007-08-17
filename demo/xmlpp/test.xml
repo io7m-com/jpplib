@@ -18,7 +18,7 @@
     <eye><pupil/><retina/><lashes/></eye>
   </head>
   <arm>
-    <ellbow gratuitiousAttribute="&quot;&apos;&amp;&lt;&gt;"
+    <ellbow attributeWithEntities="&quot;&apos;&amp;&lt;&gt;"
      andAnother="just to fill the line."/>
     <hand>
 	    <finger lang="de" name="thumb">
