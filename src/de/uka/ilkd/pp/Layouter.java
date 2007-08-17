@@ -427,29 +427,6 @@ public class Layouter<Exc extends Exception> {
 	 * relative to the current position, otherwise relative to the surrounding
 	 * block's indentation level.
 	 * 
-	 * @deprecated use {@link #begin(de.uka.ilkd.pp.Layouter.BreakConsistency, de.uka.ilkd.pp.Layouter.IndentationBase, int)}
-	 * 
-	 * @param consistent
-	 *            <code>true</code> for consistent block
-	 * @param fromPos
-	 *            increment relative to current pos, not indentation
-	 * @param indent
-	 *            increment to indentation level
-	 * @return this
-	 */
-	public Layouter<Exc> begin(boolean consistent, boolean fromPos, int indent) {
-		return begin(consistent?BreakConsistency.CONSISTENT:BreakConsistency.INCONSISTENT,
-					  fromPos?IndentationBase.FROM_POS:IndentationBase.FROM_IND,
-				      indent);
-	}
-
-	/**
-	 * Begin a block. If <code>consistent</code> is set, breaks are either all
-	 * broken or all not broken. The indentation level is increased by
-	 * <code>indent</code>. If <code>fromPos</code> is set, it is set
-	 * relative to the current position, otherwise relative to the surrounding
-	 * block's indentation level.
-	 * 
 	 * @param consistent
 	 *            <code>true</code> for consistent block
 	 * @param fromPos
@@ -617,7 +594,8 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> begin(boolean consistent, int indent) {
-		return begin(consistent, true, indent);
+		return begin(consistent?BreakConsistency.CONSISTENT:BreakConsistency.INCONSISTENT, 
+				IndentationBase.FROM_POS, indent);
 	}
 
 	/**
@@ -675,7 +653,7 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> begin(boolean consistent) {
-		return begin(consistent, true, defaultInd);
+		return begin(consistent,defaultInd);
 	}
 
 	/**
