@@ -75,12 +75,12 @@ class Printer<Exc extends Exception> {
 	 * space left on the line, the layouter decides whether this block
 	 * should be broken or not.
 	 */
-	void openBlock(Layouter.BreakConsistency consistent,
-			        Layouter.IndentationBase fromPos, 
+	void openBlock(Layouter.BreakConsistency cons,
+			        Layouter.IndentationBase indBase, 
 			        int indent, int followingLength) {
 		if (followingLength > space()) {
-				indentStack.push(indentBase(fromPos) + indent, 
-						         BreakDecision.fromBreakConsistency(consistent));
+				indentStack.push(indentBase(indBase) + indent, 
+						         BreakDecision.fromBreakConsistency(cons));
 		} else {
 			indentStack.push(0, FITS);
 		}

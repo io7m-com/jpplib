@@ -421,24 +421,25 @@ public class Layouter<Exc extends Exception> {
 	}
 
 	/**
-	 * Begin a block. If <code>consistent</code> is set, breaks are either all
-	 * broken or all not broken. The indentation level is increased by
-	 * <code>indent</code>. If <code>fromPos</code> is set, it is set
-	 * relative to the current position, otherwise relative to the surrounding
-	 * block's indentation level.
+	 * Begin a block. Parameter <code>cons</code> indicates whether this is a
+	 * consistent block or an inconsistent one. In consistent blocks, breaks are
+	 * either all broken or all not broken. The indentation level is increased
+	 * by <code>indent</code>, either relative to the current position,
+	 * or relative to the surrounding block's indentation level, depending on
+	 * the parameter <code>indBase</code>
 	 * 
-	 * @param consistent
+	 * @param cons
 	 *            <code>true</code> for consistent block
-	 * @param fromPos
+	 * @param indBase
 	 *            increment relative to current pos, not indentation
 	 * @param indent
 	 *            increment to indentation level
 	 * @return this
 	 */
-	public Layouter<Exc> begin(BreakConsistency consistent, 
-								 IndentationBase fromPos, 
+	public Layouter<Exc> begin(BreakConsistency cons, 
+								 IndentationBase indBase, 
 								 int indent) {
-		StreamToken t = new OpenBlockToken(consistent, fromPos, indent);
+		StreamToken t = new OpenBlockToken(cons, indBase, indent);
 		enqueue(t);
 		push(t);
 		return this;
@@ -981,15 +982,15 @@ public class Layouter<Exc extends Exception> {
 
 	/** A token corresponding to a <code>begin</code> call. */
 	private class OpenBlockToken extends SizeCalculatingToken {
-		protected BreakConsistency consistent;
+		protected BreakConsistency cons;
 
-		protected IndentationBase fromPos;
+		protected IndentationBase indBase;
 
 		protected int indent;
 		
 		OpenBlockToken(BreakConsistency consistent, IndentationBase fromPos, int indent) {
-			this.consistent = consistent;
-			this.fromPos = fromPos;
+			this.cons = consistent;
+			this.indBase = fromPos;
 			this.indent = indent;
 		}
 
@@ -998,7 +999,7 @@ public class Layouter<Exc extends Exception> {
 		}
 
 		void print() throws Exc {
-			out.openBlock(consistent,fromPos, 
+			out.openBlock(cons,indBase, 
 						  indent, followingSize());
 		}
 	}
