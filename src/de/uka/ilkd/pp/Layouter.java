@@ -423,10 +423,10 @@ public class Layouter<Exc extends Exception> {
 	/**
 	 * Begin a block. Parameter <code>cons</code> indicates whether this is a
 	 * consistent block or an inconsistent one. In consistent blocks, breaks are
-	 * either all broken or all not broken. The indentation level is increased
+	 * either all broken or none is broken. The indentation level is increased
 	 * by <code>indent</code>, either relative to the current position,
 	 * or relative to the surrounding block's indentation level, depending on
-	 * the parameter <code>indBase</code>
+	 * the parameter <code>indBase</code>.
 	 * 
 	 * @param cons
 	 *            <code>true</code> for consistent block
