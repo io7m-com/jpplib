@@ -16,7 +16,6 @@
 
 package de.uka.ilkd.pp;
 
-import de.uka.ilkd.pp.Layouter.BreakConsistency;
 import junit.framework.TestCase;
 
 /** Unit-Test the {@link Layouter} class. */
