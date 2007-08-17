@@ -79,6 +79,7 @@ public class DOMXMLPrettyPrinter {
 
 	void prettyPrint() throws IOException {
 		pp.beginC(0);
+        pp.print("<?xml version=\"1.0\"?>").nl();
 		insertBreak = false;
 		prettyPrint(document);
 		pp.end();
