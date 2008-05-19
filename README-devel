@@ -10,6 +10,6 @@ is in the .project and .classpath files in the top directory.
 The actual package source is in the src directory, while the
 demo directory contains some examples.
 
-build.xml is an Eclipes-exportet build file, build-distro.xml 
-imports build.xml and containts some targets to build javadocs,
+build.xml is an Eclipse-exported build file, build-distro.xml 
+imports build.xml and contains some targets to build javadocs,
 jars, and zipfiles.
