@@ -851,6 +851,11 @@ public class Layouter<Exc extends Exception> {
 		 * guaranteed to be larger than what fits on a line, some large value
 		 * might be returned instead of the precise size.
 		 */
+		
+		/* This is actually called only in classes under SizeCalculatingToken, which
+		 * overrides it.  But it's nicer to think of it in conjunction with 
+		 * followingSizeKnown() below.*/
+		@SuppressWarnings("unused")
 		int followingSize() {
 			return size();
 		}
