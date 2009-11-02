@@ -77,7 +77,7 @@ public class DataPrettyPrinter {
 	 */
 	public static void main(String[] args) {
 		System.out.println("A short list\n");
-		List imsevimse = Arrays.asList(new String[] { "imse", "vimse",
+		List<String> imsevimse = Arrays.asList(new String[] { "imse", "vimse",
 				"spindel" });
 		System.out.println(prettyPrint(imsevimse));
 
