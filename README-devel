@@ -1,7 +1,7 @@
 This is the source of the Java™ Pretty Printer Library (jpplib)
 http://jpplib.sourceforge.net/
 
-The source is distributed under the GNU General Public License, 
+The source is distributed under a BSD style License, 
 see the file LICENSE.
 
 It is organized as an eclipse project, i.e. project information

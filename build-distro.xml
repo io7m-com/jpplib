@@ -19,7 +19,7 @@
 	<!-- Import the Eclipse-generated build file 
 	     for JUnit path, build target, etc -->
 	<import file="build.xml"/>
-	<property name="jpplib.version" value="0.6"/>
+	<property name="jpplib.version" value="0.7"/>
 	<property name="jpplib.jarfile" value="jpplib-${jpplib.version}.jar"/>
 	<target name="create-jpplib-zips"
 		depends="create-jpplib-bin-zip,create-jpplib-src-zip"/>
