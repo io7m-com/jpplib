@@ -9,7 +9,7 @@ Sourceforge.net or via anonymous SVN access.
 This archive contains the following files:
 
 jpplib.jar	the JAR file with the compiled classes
-LICENSE		a copy of the GNU Public License
+LICENSE		a copy of the BSD style license
 README		this file
 api			a directory with JavaDoc API documentation
 demo		a directory with some demo applications
