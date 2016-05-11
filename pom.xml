@@ -28,8 +28,8 @@
 
   <licenses>
     <license>
-      <name>ISC License</name>
-      <url>http://io7m.com/license/isc.txt</url>
+      <name>BSD-3 License</name>
+      <url>https://raw.githubusercontent.com/io7m/jpplib/master/LICENSE</url>
     </license>
   </licenses>
 
