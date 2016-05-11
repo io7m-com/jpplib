@@ -14,11 +14,6 @@
         The <b>${project.name}</b> package implements a generic pretty printer.
       </p>
     </subsection>
-    <subsection name="Features">
-      <ul>
-        <li>ISC license.</li>
-      </ul>
-    </subsection>
   </body>
 
 </document>
