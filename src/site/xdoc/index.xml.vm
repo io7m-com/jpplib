@@ -10,9 +10,49 @@
 
   <body>
     <subsection name="${project.name}">
-      <p>
-        The <b>${project.name}</b> package implements a generic pretty printer.
-      </p>
+<p>
+jpplib is a small Java™ package to pretty-print information using line
+breaks and indentation.  For instance, it can be used to print
+    <pre>    while (i&gt;0) {
+      i--;
+      j++;
+    }
+    </pre>
+    instead of
+    <pre>    while (i&gt;0) { i
+    --; j++;}
+    </pre>
+if the maximum line width is 15 characters.  Or you could use it
+to print (nested) <code>java.util.List</code>s and <code>Map</code>s on
+one line, if they fit, or on several lines, with indentation, if
+they don't.</p>
+
+<p>The purpose of jpplib is <em>not</em> to pretty-print Java™
+programs.  It is a library that can be used to write pretty-printers
+for all manner of structured information: programs, XML files,
+mathematical expressions, abstract syntax trees, content of data
+structures for debugging... Apart from a few included examples, it
+does not contain any actual pretty-printers, any more
+than <code>java.io</code> contains any code for printing concrete
+information.</p>
+
+<p>The algorithm employed by jpplib is that described by Derek
+C. Oppen in his paper <em>Prettyprinting</em>, TOPLAS volume 2 number
+4, ACM, 1980, pp. 465-483, with some extensions.  It has the property
+that if the input contains enough actual text (and not just
+administrative chit-chat), then pretty-printing uses constant space, and
+time linear in the size of the input. In fact, output will begin
+before the whole input has been given, so this class can be used to
+pretty-print a stream of data.</p>
+
+<p>An interesting extension is the <code>mark()</code> method of the
+<code>Layouter</code> class, which allows to attach an arbitrary
+object to a given position in the text.  This object can be retrieved
+in the formatted output by the back-end.  The <code>mark()</code>
+feature is useful e.g. for interactive applications, where the user
+may click on a position in the formatted text, and the software needs
+to figure out which piece of data corresponds to the text that was
+clicked on.</p>
     </subsection>
   </body>
 
