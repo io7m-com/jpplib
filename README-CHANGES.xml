@@ -8,6 +8,12 @@
     <c:item>
       <c:date>2016-05-12</c:date>
       <c:type-code-new/>
+      <c:ticket>1</c:ticket>
+      <c:summary>Add finish() method to Layouter class</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-05-12</c:date>
+      <c:type-code-new/>
       <c:ticket>2</c:ticket>
       <c:summary>Add SLF4J support for tracing layouts</c:summary>
     </c:item>

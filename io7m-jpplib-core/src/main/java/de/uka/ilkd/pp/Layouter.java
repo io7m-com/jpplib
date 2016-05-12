@@ -240,6 +240,8 @@ public class Layouter<Exc extends Exception> {
 		LOG = LoggerFactory.getLogger(Layouter.class);
 	}
 
+	private boolean finished;
+
 	/** An enum type to distinguish consistent and inconsistent blocks. */
 	public static enum BreakConsistency {CONSISTENT,INCONSISTENT}
 	
@@ -426,6 +428,8 @@ public class Layouter<Exc extends Exception> {
 	public Layouter<Exc> print(String s) throws Exc {
 		LOG.trace("print: {}", s);
 
+		checkNotFinished();
+
 		if (delimStack.isEmpty()) {
 			out.print(s);
 			totalSize += back.measure(s);
@@ -466,20 +470,31 @@ public class Layouter<Exc extends Exception> {
 			LOG.trace("begin: {} {} {}", cons, indBase, Integer.valueOf(indent));
 		}
 
+		checkNotFinished();
+
 		StreamToken t = new OpenBlockToken(cons, indBase, indent);
 		enqueue(t);
 		push(t);
 		return this;
 	}
 
+	private void checkNotFinished()
+	{
+		if (finished) {
+			throw new IllegalStateException("Layouter is already finished");
+		}
+	}
 
 	/**
 	 * Ends the innermost block.
 	 * 
 	 * @return this
 	 */
+
 	public Layouter<Exc> end() throws Exc {
 		LOG.trace("end");
+
+		checkNotFinished();
 
 		if (delimStack.isEmpty()) {
 			/* then stream is also empty, so output */
@@ -520,6 +535,8 @@ public class Layouter<Exc extends Exception> {
 			LOG.trace("brk: {} {}", Integer.valueOf(width), Integer.valueOf(offset));
 		}
 
+		checkNotFinished();
+
 		if (!delimStack.isEmpty()) {
 			StreamToken s = top();
 			if (s.isBreakToken()) {
@@ -554,6 +571,8 @@ public class Layouter<Exc extends Exception> {
 			LOG.trace("ind: {} {}", Integer.valueOf(width), Integer.valueOf(offset));
 		}
 
+		checkNotFinished();
+
 		if (delimStack.isEmpty()) {
 			out.indent(width, offset);
 			totalSize += width;
@@ -583,6 +602,8 @@ public class Layouter<Exc extends Exception> {
 			LOG.trace("mark: {}", o);
 		}
 
+		checkNotFinished();
+
 		if (delimStack.isEmpty()) {
 			out.mark(o);
 		} else {
@@ -603,26 +624,65 @@ public class Layouter<Exc extends Exception> {
 		if (LOG.isTraceEnabled()) {
 			LOG.trace("flush");
 		}
+
+		checkNotFinished();
+
 		out.flush();
 		return this;
 	}
 
 	/**
-	 * Close the Layouter. No more methods should be called after this. All
+	 * @see #finish()
+	 * @return {@code true} if the Layouter has finished
+	 * @since 0.7.1
+   */
+
+	public boolean isFinished()
+	{
+		return this.finished;
+	}
+
+	/**
+	 * Finish (if not already finished) and lose the Layouter. No more methods
+	 * should be called after this. All
 	 * blocks begun must have been ended by this point. Any pending material is
 	 * written to the backend, before the {@link Backend#close()} method of the
 	 * backend is called, which closes any open I/O streams, etc.
-	 * 
+	 *
+	 * @see #finish()
 	 */
 	public void close() throws Exc {
 		LOG.trace("close");
 
-		if (!delimStack.isEmpty()) {
-			throw new UnbalancedBlocksException();
-		} else {
-			advanceLeft();
+		if (!finished) {
+			finish();
 		}
+
 		out.close();
+	}
+
+	/**
+	 * Finish the Layouter. No more methods should be called after this. All
+	 * blocks begun must have been ended by this point. Any pending material is
+	 * written to the backend.
+	 *
+	 * @since 0.7.1
+   */
+
+	public void finish()
+		throws Exc
+	{
+		try {
+			checkNotFinished();
+
+			if (!delimStack.isEmpty()) {
+				throw new UnbalancedBlocksException();
+			} else {
+				advanceLeft();
+			}
+		} finally {
+			this.finished = true;
+		}
 	}
 
 	// CONVENIENCE STREAM OPERATIONS ---------------------------------
