@@ -28,6 +28,9 @@
 
 package de.uka.ilkd.pp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -231,6 +234,12 @@ import java.util.StringTokenizer;
 
 public class Layouter<Exc extends Exception> {
 
+	private static final Logger LOG;
+
+	static {
+		LOG = LoggerFactory.getLogger(Layouter.class);
+	}
+
 	/** An enum type to distinguish consistent and inconsistent blocks. */
 	public static enum BreakConsistency {CONSISTENT,INCONSISTENT}
 	
@@ -415,6 +424,8 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> print(String s) throws Exc {
+		LOG.trace("print: {}", s);
+
 		if (delimStack.isEmpty()) {
 			out.print(s);
 			totalSize += back.measure(s);
@@ -451,6 +462,10 @@ public class Layouter<Exc extends Exception> {
 	public Layouter<Exc> begin(BreakConsistency cons, 
 								 IndentationBase indBase, 
 								 int indent) {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("begin: {} {} {}", cons, indBase, Integer.valueOf(indent));
+		}
+
 		StreamToken t = new OpenBlockToken(cons, indBase, indent);
 		enqueue(t);
 		push(t);
@@ -464,6 +479,8 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> end() throws Exc {
+		LOG.trace("end");
+
 		if (delimStack.isEmpty()) {
 			/* then stream is also empty, so output */
 			out.closeBlock();
@@ -499,6 +516,10 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> brk(int width, int offset) throws Exc {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("brk: {} {}", Integer.valueOf(width), Integer.valueOf(offset));
+		}
+
 		if (!delimStack.isEmpty()) {
 			StreamToken s = top();
 			if (s.isBreakToken()) {
@@ -529,6 +550,10 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> ind(int width, int offset) throws Exc {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("ind: {} {}", Integer.valueOf(width), Integer.valueOf(offset));
+		}
+
 		if (delimStack.isEmpty()) {
 			out.indent(width, offset);
 			totalSize += width;
@@ -554,6 +579,10 @@ public class Layouter<Exc extends Exception> {
 	 * 
 	 */
 	public Layouter<Exc> mark(Object o) throws Exc {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("mark: {}", o);
+		}
+
 		if (delimStack.isEmpty()) {
 			out.mark(o);
 		} else {
@@ -571,6 +600,9 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> flush() throws Exc {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("flush");
+		}
 		out.flush();
 		return this;
 	}
@@ -583,6 +615,8 @@ public class Layouter<Exc extends Exception> {
 	 * 
 	 */
 	public void close() throws Exc {
+		LOG.trace("close");
+
 		if (!delimStack.isEmpty()) {
 			throw new UnbalancedBlocksException();
 		} else {
@@ -607,6 +641,13 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> begin(boolean consistent, int indent) {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace(
+				"begin: {} {}",
+				Boolean.valueOf(consistent),
+				Integer.valueOf(indent));
+		}
+
 		return begin(consistent?BreakConsistency.CONSISTENT:BreakConsistency.INCONSISTENT, 
 				IndentationBase.FROM_POS, indent);
 	}
@@ -768,6 +809,10 @@ public class Layouter<Exc extends Exception> {
 	 * @return this
 	 */
 	public Layouter<Exc> pre(String s) throws Exc {
+		if (LOG.isTraceEnabled()) {
+			LOG.trace("pre: {}", s);
+		}
+
 		StringTokenizer st = new StringTokenizer(s, "\n", true);
 		beginC(0);
 		while (st.hasMoreTokens()) {
