@@ -8,7 +8,12 @@
     <c:item>
       <c:date>2016-08-05</c:date>
       <c:type-code-fix/>
-      <c:summary>Update POM plugins</c:summary>
+      <c:summary>Update POM plugins.</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-08-05</c:date>
+      <c:type-code-fix/>
+      <c:summary>The packaged jar is now an OSGi bundle.</c:summary>
     </c:item>
   </c:release>
 
