@@ -3,6 +3,17 @@
   <c:project>io7m-jpplib</c:project>
 
   <c:release c:ticket-system="com.github.io7m.jpplib">
+    <c:date>2016-09-01</c:date>
+    <c:version>0.7.3</c:version>
+    <c:item>
+      <c:date>2016-09-01</c:date>
+      <c:type-code-fix/>
+      <c:ticket>3</c:ticket>
+      <c:summary>Delegate to the correct super method in DataLayouter.</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.github.io7m.jpplib">
     <c:date>2016-08-05</c:date>
     <c:version>0.7.2</c:version>
     <c:item>

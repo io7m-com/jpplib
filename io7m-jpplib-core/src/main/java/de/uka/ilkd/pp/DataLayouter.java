@@ -297,13 +297,13 @@ public class DataLayouter<Exc extends Exception> extends Layouter<Exc> {
 
 	@Override
 	public DataLayouter<Exc> beginIInd() {
-		super.beginI();
+		super.beginIInd();
 		return this;
 	}
 
 	@Override
 	public DataLayouter<Exc> beginIInd(int indent) {
-		super.beginI(indent);
+		super.beginIInd(indent);
 		return this;
 	}
 
