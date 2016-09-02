@@ -56,7 +56,7 @@
   </c:release>
 
   <c:ticket-system xml:id="com.github.io7m.jpplib">
-    <c:ticket-url>https://github.com/io7m/jpplib/issues</c:ticket-url>
+    <c:ticket-url>https://github.com/io7m/jpplib/issues/</c:ticket-url>
   </c:ticket-system>
 
 </c:changelog>
