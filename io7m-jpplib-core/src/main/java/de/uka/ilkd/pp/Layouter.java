@@ -413,6 +413,17 @@ public class Layouter<Exc extends Exception> {
 				indentation);
 	}
 
+	// PROPERTY GETTERS ------------------------------------
+
+	/**
+	 * Gets default indentation for this block
+	 *
+	 * @return default indentation
+	 */
+	public int getDefaultIndentation() {
+		return defaultInd;
+	}
+
 	// PRIMITIVE STREAM OPERATIONS ------------------------------------
 
 	/**
