@@ -3,6 +3,16 @@
   <c:project>io7m-jpplib</c:project>
 
   <c:release c:ticket-system="com.github.io7m.jpplib">
+    <c:date>2016-09-22</c:date>
+    <c:version>0.7.4</c:version>
+    <c:item>
+      <c:date>2016-09-22</c:date>
+      <c:type-code-new/>
+      <c:summary>Add getDefaultIndentation() to Layout</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release c:ticket-system="com.github.io7m.jpplib">
     <c:date>2016-09-01</c:date>
     <c:version>0.7.3</c:version>
     <c:item>
@@ -56,7 +66,7 @@
   </c:release>
 
   <c:ticket-system xml:id="com.github.io7m.jpplib">
-    <c:ticket-url>https://github.com/io7m/jpplib/issues</c:ticket-url>
+    <c:ticket-url>https://github.com/io7m/jpplib/issues/</c:ticket-url>
   </c:ticket-system>
 
 </c:changelog>
