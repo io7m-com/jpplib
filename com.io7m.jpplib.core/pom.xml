@@ -7,21 +7,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jpplib</groupId>
-    <artifactId>io7m-jpplib</artifactId>
-    <version>0.7.4</version>
+    <artifactId>com.io7m.jpplib</artifactId>
+    <version>0.8.0</version>
   </parent>
-  <artifactId>io7m-jpplib-core</artifactId>
+  <artifactId>com.io7m.jpplib.core</artifactId>
 
   <packaging>bundle</packaging>
-  <name>io7m-jpplib-core</name>
+  <name>com.io7m.jpplib.core</name>
   <description>Generic pretty printer (Core)</description>
   <url>http://io7m.github.io/jpplib/</url>
-
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
 
   <dependencies>
     <dependency>
@@ -48,8 +42,15 @@
             <Export-Package>
               de.uka.ilkd.pp
             </Export-Package>
+            <Automatic-Module-Name>com.io7m.jpplib.core</Automatic-Module-Name>
           </instructions>
         </configuration>
+      </plugin>
+
+      <!-- Determine test coverage -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
