@@ -7,26 +7,20 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jpplib</groupId>
-    <artifactId>io7m-jpplib</artifactId>
-    <version>0.7.4</version>
+    <artifactId>com.io7m.jpplib</artifactId>
+    <version>0.8.0</version>
   </parent>
-  <artifactId>io7m-jpplib-demo</artifactId>
+  <artifactId>com.io7m.jpplib.demo</artifactId>
 
   <packaging>jar</packaging>
-  <name>io7m-jpplib-demo</name>
+  <name>com.io7m.jpplib.demo</name>
   <description>Generic pretty printer (Demos)</description>
   <url>http://io7m.github.io/jpplib/</url>
-
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
 
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jpplib-core</artifactId>
+      <artifactId>com.io7m.jpplib.core</artifactId>
       <version>${project.version}</version>
     </dependency>
 
