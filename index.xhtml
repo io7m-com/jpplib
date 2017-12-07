@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta content="https://www.github.com/io7m/minisite; 0.0.9" name="generator"/>
+        <meta content="application/xhtml+xml; charset=UTF-8" http-equiv="Content-Type"/>
+        <style type="text/css">body {
+  margin: 2em;
+  padding: 0px;
+  font-family: sans-serif;
+}
+
+div#main {
+  max-width: 50em;
+}
+
+p {
+  text-align: justify;
+}
+
+.changelog {
+  font-family: monospace;
+}
+.changelog td {
+  vertical-align: text-top;
+  padding-right: 2em;
+}
+.changelog td:nth-child(1) {
+  width: 10em;
+}
+
+.overview_content_area {
+
+}
+
+.overview_title_area {
+
+}
+
+.overview_title_area::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.icon {
+  float: left;
+  margin-right: 1em;
+}
+</style>
+        <title>com.io7m.jpplib</title>
+    </head>
+    <body>
+        <div id="main">
+            <div id="overview">
+                <div class="overview_title_area">
+                    <img alt="Project icon" class="icon" height="64"
+                        src="icon.png" width="64"/>
+                    <h1>com.io7m.jpplib</h1>
+                </div>
+                <div class="overview_content_area">
+                    <div>
+                        <p>
+                            <a href="https://travis-ci.org/io7m/jpplib">
+                                <img alt="Build status" src="https://img.shields.io/travis/io7m/jpplib.png?style=flat-square"/>
+                            </a>
+                            <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.io7m.jpplib%22">
+                                <img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.io7m.jpplib/com.io7m.jpplib.png?style=flat-square"/>
+                            </a>
+                            <a href="https://www.codacy.com/app/github_79/jpplib">
+                                <img alt="Codacy" src="https://img.shields.io/codacy/grade/269673febf114ac69376f8073f5251cc.png?style=flat-square"/>
+                            </a>
+                            <a href="https://codecov.io/gh/io7m/jpplib">
+                                <img alt="Codecov" src="https://img.shields.io/codecov/c/github/io7m/jpplib.png?style=flat-square"/>
+                            </a>
+                        </p>
+                        <p>
+  jpplib is a small Java™ package to pretty-print information using line
+  breaks and indentation.  For instance, it can be used to print
+      <pre>    while (i&gt;0) {
+        i--;
+        j++;
+      }
+      </pre>
+      instead of
+      <pre>    while (i&gt;0) { i
+      --; j++;}
+      </pre>
+  if the maximum line width is 15 characters.  Or you could use it
+  to print (nested) <code>java.util.List</code>s and <code>Map</code>s on
+  one line, if they fit, or on several lines, with indentation, if
+  they don't.</p>
+                        <p>The purpose of jpplib is <em>not</em> to pretty-print Java™
+  programs.  It is a library that can be used to write pretty-printers
+  for all manner of structured information: programs, XML files,
+  mathematical expressions, abstract syntax trees, content of data
+  structures for debugging... Apart from a few included examples, it
+  does not contain any actual pretty-printers, any more
+  than <code>java.io</code> contains any code for printing concrete
+  information.</p>
+                        <p>The algorithm employed by jpplib is that described by Derek
+  C. Oppen in his paper <em>Prettyprinting</em>, TOPLAS volume 2 number
+  4, ACM, 1980, pp. 465-483, with some extensions.  It has the property
+  that if the input contains enough actual text (and not just
+  administrative chit-chat), then pretty-printing uses constant space, and
+  time linear in the size of the input. In fact, output will begin
+  before the whole input has been given, so this class can be used to
+  pretty-print a stream of data.</p>
+                        <p>An interesting extension is the <code>mark()</code> method of the
+  <code>Layouter</code> class, which allows to attach an arbitrary
+  object to a given position in the text.  This object can be retrieved
+  in the formatted output by the back-end.  The <code>mark()</code>
+  feature is useful e.g. for interactive applications, where the user
+  may click on a position in the formatted text, and the software needs
+  to figure out which piece of data corresponds to the text that was
+  clicked on.</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h2>Contents</h2>
+                <ul>
+                    <li>
+                        <a href="#features">Features</a>
+                    </li>
+                    <li>
+                        <a href="#releases">Releases</a>
+                    </li>
+                    <li>
+                        <a href="#documentation">Documentation</a>
+                    </li>
+                    <li>
+                        <a href="#maven">Maven</a>
+                    </li>
+                    <li>
+                        <a href="#changes">Changes</a>
+                    </li>
+                    <li>
+                        <a href="#sources">Sources</a>
+                    </li>
+                    <li>
+                        <a href="#license">License</a>
+                    </li>
+                    <li>
+                        <a href="#bug-tracker">Bug Tracker</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="features">
+                <h2>Features</h2>
+                <div>
+                    <ul>
+                        <li>
+                            <a href="https://www.osgi.org/">OSGi</a>-ready.</li>
+                        <li>
+                            <a href="https://en.wikipedia.org/wiki/Java_Platform_Module_System">JPMS</a>-ready</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="releases">
+                <h2>Releases</h2>
+                <p>The current release is <tt>0.8.0</tt>.</p>
+                <p>Source code and binaries are available from the <a href="https://repo1.maven.org/maven2/com/io7m/jpplib">repository</a>.</p>
+            </div>
+            <div id="documentation">
+                <h2>Documentation</h2>
+                <p>Documentation for the <tt>0.8.0</tt> release is available for reading online.</p>
+
+                <p>Documentation for current and older releases is archived in the <a href="https://repo1.maven.org/maven2/com/io7m/jpplib">repository</a>.</p>
+                <div>
+                    <p>No documentation is currently available.</p>
+                </div>
+            </div>
+            <div id="maven">
+                <h2>Maven</h2>
+                <p>The following is a complete list of the project's modules expressed as Maven dependencies: </p>
+                <pre>&lt;dependency&gt;
+  &lt;groupId&gt;<a
+                        href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.io7m.jpplib%22">com.io7m.jpplib</a>&lt;/groupId&gt;
+  &lt;artifactId&gt;<a
+                        href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22com.io7m.jpplib%22">com.io7m.jpplib</a>&lt;/artifactId&gt;
+  &lt;version&gt;<a
+                        href="http://search.maven.org/#artifactdetails%7Ccom.io7m.jpplib%7Ccom.io7m.jpplib%7C0.8.0%7Cjar">0.8.0</a>&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+  &lt;groupId&gt;<a
+                        href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.io7m.jpplib%22">com.io7m.jpplib</a>&lt;/groupId&gt;
+  &lt;artifactId&gt;<a
+                        href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22com.io7m.jpplib.core%22">com.io7m.jpplib.core</a>&lt;/artifactId&gt;
+  &lt;version&gt;<a
+                        href="http://search.maven.org/#artifactdetails%7Ccom.io7m.jpplib%7Ccom.io7m.jpplib.core%7C0.8.0%7Cjar">0.8.0</a>&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+  &lt;groupId&gt;<a
+                        href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.io7m.jpplib%22">com.io7m.jpplib</a>&lt;/groupId&gt;
+  &lt;artifactId&gt;<a
+                        href="http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22com.io7m.jpplib.demo%22">com.io7m.jpplib.demo</a>&lt;/artifactId&gt;
+  &lt;version&gt;<a href="http://search.maven.org/#artifactdetails%7Ccom.io7m.jpplib%7Ccom.io7m.jpplib.demo%7C0.8.0%7Cjar">0.8.0</a>&lt;/version&gt;
+&lt;/dependency&gt;
+
+</pre>
+                <p>Each release of the project is made available on <a href="http://search.maven.org">Maven Central</a> within ten minutes of the release announcement.</p>
+            </div>
+            <div id="changes">
+                <h2>Changes</h2>
+                <p>Subscribe to the releases <a href="releases.atom">atom feed</a>.</p>
+                <table class="changelog" summary="Changes for project com.io7m.jpplib">
+                    <tr>
+                        <td>2017-12-07</td>
+                        <td>Release: com.io7m.jpplib 0.8.0</td>
+                    </tr>
+                    <tr>
+                        <td>2017-12-07</td>
+                        <td>Change: Use primogenitor, rename project to com.io7m.jpplib</td>
+                    </tr>
+                    <tr>
+                        <td>2017-12-07</td>
+                        <td>Change: Require JDK 9 to build the code (but the result is still Java 8 bytecode)</td>
+                    </tr>
+                    <tr>
+                        <td>2017-12-07</td>
+                        <td>Change: Add an Automatic-Module-Name manifest field for use in Java 9 projects</td>
+                    </tr>
+                    <tr>
+                        <td>2016-09-22</td>
+                        <td>Release: com.io7m.jpplib 0.7.4</td>
+                    </tr>
+                    <tr>
+                        <td>2016-09-22</td>
+                        <td>Change: Add getDefaultIndentation() to Layout</td>
+                    </tr>
+                    <tr>
+                        <td>2016-09-01</td>
+                        <td>Release: com.io7m.jpplib 0.7.3</td>
+                    </tr>
+                    <tr>
+                        <td>2016-09-01</td>
+
+                        <td>Change: Delegate to the correct super method in DataLayouter. (tickets: <a href="https://github.com/io7m/jpplib/issues/3">3</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>2016-08-05</td>
+                        <td>Release: com.io7m.jpplib 0.7.2</td>
+                    </tr>
+                    <tr>
+                        <td>2016-08-05</td>
+                        <td>Change: Update POM plugins.</td>
+                    </tr>
+                    <tr>
+                        <td>2016-08-05</td>
+                        <td>Change: The packaged jar is now an OSGi bundle.</td>
+                    </tr>
+                    <tr>
+                        <td>2016-05-29</td>
+                        <td>Release: com.io7m.jpplib 0.7.1</td>
+                    </tr>
+                    <tr>
+                        <td>2016-05-12</td>
+
+                        <td>Change: Add finish() method to Layouter class (tickets: <a href="https://github.com/io7m/jpplib/issues/1">1</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>2016-05-12</td>
+
+                        <td>Change: Add SLF4J support for tracing layouts (tickets: <a href="https://github.com/io7m/jpplib/issues/2">2</a>)</td>
+                    </tr>
+                    <tr>
+                        <td>2016-05-11</td>
+                        <td>Release: com.io7m.jpplib 0.7.0</td>
+                    </tr>
+                    <tr>
+                        <td>2016-05-11</td>
+                        <td>Change: Initial fork of project.</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="Sources">
+                <h2>Sources</h2>
+                <p>This project uses <a href="http://www.git-scm.com">Git</a> to manage source code.</p>
+                <p>Repository: <a href="https://github.com/io7m/primogenitor/com.io7m.jpplib">https://github.com/io7m/primogenitor/com.io7m.jpplib</a>
+                </p>
+                <pre>$ git clone https://github.com/io7m/primogenitor/com.io7m.jpplib</pre>
+            </div>
+            <div id="license">
+                <h2>License</h2>
+                <pre>Copyright (c) 2009, Martin Giese
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions are met:
+  
+  * Redistributions of source code must retain the above copyright 
+    notice, this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright 
+    notice, this list of conditions and the following disclaimer in the 
+    documentation and/or other materials provided with the distribution.
+  * Neither the name of the author nor the names of his contributors 
+    may be used to endorse or promote products derived from this 
+    software without specific prior written permission.
+  
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS  SOFTWARE, EVEN IF ADVISED OF 
+THE POSSIBILITY OF SUCH DAMAGE.
+</pre>
+            </div>
+            <div id="bug-tracker">
+                <h2>Bug Tracker</h2>
+                <p>The project uses <a href="http://github.com/io7m/jpplib/issues">GitHub Issues</a> to track issues.</p>
+            </div>
+        </div>
+    </body>
+</html>
