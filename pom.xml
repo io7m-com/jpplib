@@ -63,6 +63,12 @@
     <system>GitHub Issues</system>
   </issueManagement>
 
+  <scm>
+    <url>https://github.com/io7m/jpplib</url>
+    <connection>scm:git:https://github.com/io7m/jpplib</connection>
+    <developerConnection>scm:git:https://github.com/io7m/jpplib</developerConnection>
+  </scm>
+
   <distributionManagement>
     <site>
       <id>GitHub</id>
