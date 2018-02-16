@@ -6,7 +6,7 @@
   </a:author>
   <a:id>http://github.com/io7m/jpplib/releases.atom</a:id>
   <a:title>com.io7m.jpplib Releases</a:title>
-  <a:updated>2017-12-07T15:24:59+00:00</a:updated>
+  <a:updated>2018-02-16T15:05:46+00:00</a:updated>
   <a:entry>
     <a:id>0.8.0</a:id>
     <a:updated>2017-12-07T00:00:00+00:00</a:updated>
