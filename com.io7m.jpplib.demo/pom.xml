@@ -15,7 +15,7 @@
   <packaging>jar</packaging>
   <name>com.io7m.jpplib.demo</name>
   <description>Generic pretty printer (Demos)</description>
-  <url>http://io7m.github.io/jpplib/</url>
+  <url>https://www.io7m.com/software/jpplib/</url>
 
   <dependencies>
     <dependency>
@@ -30,5 +30,21 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Ignore dependencies that bytecode analysis misses. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <failOnWarning>true</failOnWarning>
+          <ignoredUnusedDeclaredDependencies>
+            <ignoredUnusedDeclaredDependency>junit:junit:*</ignoredUnusedDeclaredDependency>
+          </ignoredUnusedDeclaredDependencies>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

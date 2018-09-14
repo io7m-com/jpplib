@@ -9,7 +9,7 @@
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0-beta0013</version>
   </parent>
 
   <groupId>com.io7m.jpplib</groupId>
@@ -27,8 +27,6 @@
   </modules>
 
   <properties>
-    <io7m.checkstyle.artifact>com.io7m.jpplib.checkstyle</io7m.checkstyle.artifact>
-    <io7m.checkstyle.path>/com/io7m/jpplib/checkstyle/checkstyle.xml</io7m.checkstyle.path>
     <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
 
     <!-- Disable CheckStyle and JavaDoc linting -->
@@ -71,9 +69,9 @@
 
   <distributionManagement>
     <site>
-      <id>GitHub</id>
-      <name>GitHub</name>
-      <url>http://io7m.github.io/jpplib</url>
+      <id>io7m</id>
+      <name>io7m.com</name>
+      <url>https://www.io7m.com/software/jpplib/</url>
     </site>
     <repository>
       <id>sonatype-nexus-staging</id>
