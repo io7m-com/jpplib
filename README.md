@@ -10,3 +10,8 @@ See https://www.io7m.com/software/jpplib/ for more information.
 
 ![jpplib](./src/site/resources/jpplib.jpg?raw=true)
 
+## Building
+
+Note that although the project is Java 8 compatible at runtime (and the compiled
+artifacts on Maven Central are Java 8 bytecode), we do not support _building_ the
+project on anything less than JDK 11.
