@@ -27,10 +27,9 @@
   </modules>
 
   <properties>
-    <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
-
-    <!-- Disable CheckStyle and JavaDoc linting -->
     <checkstyle.skip>true</checkstyle.skip>
+    <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
+    <io7m.java.targetJavaVersion>8</io7m.java.targetJavaVersion>
     <io7m.javadoc.docLint>-Xdoclint:none</io7m.javadoc.docLint>
   </properties>
 
@@ -107,17 +106,6 @@
   <build>
     <pluginManagement>
       <plugins>
-        <!-- Require JDK >= 8 -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>8</source>
-            <target>8</target>
-            <release>8</release>
-          </configuration>
-        </plugin>
-
         <!-- jstructural plugin for generating documentation. -->
         <plugin>
           <groupId>com.io7m.jstructural</groupId>
