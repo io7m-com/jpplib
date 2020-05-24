@@ -5,8 +5,8 @@
 
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
-    <artifactId>com.io7m.primogenitor</artifactId>
-    <version>3.0.0-beta0010</version>
+    <artifactId>com.io7m.primogenitor.full</artifactId>
+    <version>5.0.0</version>
   </parent>
 
   <groupId>com.io7m.jpplib</groupId>
@@ -24,12 +24,10 @@
   </modules>
 
   <properties>
-    <io7m.checkstyle.artifact>com.io7m.jpplib.checkstyle</io7m.checkstyle.artifact>
-    <io7m.checkstyle.path>/com/io7m/jpplib/checkstyle/checkstyle.xml</io7m.checkstyle.path>
-    <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
-
-    <!-- Disable CheckStyle and JavaDoc linting -->
     <checkstyle.skip>true</checkstyle.skip>
+    <com.codacy.id>269673febf114ac69376f8073f5251cc</com.codacy.id>
+    <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
+    <io7m.java.targetJavaVersion>8</io7m.java.targetJavaVersion>
     <io7m.javadoc.docLint>-Xdoclint:none</io7m.javadoc.docLint>
   </properties>
 
@@ -100,17 +98,6 @@
   <build>
     <pluginManagement>
       <plugins>
-        <!-- Require JDK >= 8 -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>8</source>
-            <target>8</target>
-            <release>8</release>
-          </configuration>
-        </plugin>
-
         <!-- jstructural plugin for generating documentation. -->
         <plugin>
           <groupId>com.io7m.jstructural</groupId>
