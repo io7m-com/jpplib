@@ -14,7 +14,7 @@
 
   <groupId>com.io7m.jpplib</groupId>
   <artifactId>com.io7m.jpplib</artifactId>
-  <version>0.8.0</version>
+  <version>0.8.1</version>
 
   <packaging>pom</packaging>
   <name>com.io7m.jpplib</name>
