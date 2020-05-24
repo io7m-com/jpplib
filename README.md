@@ -7,8 +7,6 @@ jpplib
 [![Codacy grade](https://img.shields.io/codacy/grade/269673febf114ac69376f8073f5251cc.png?style=flat-square)](https://www.codacy.com/app/github_79/jpplib)
 [![Codecov](https://img.shields.io/codecov/c/github/io7m/jpplib.png?style=flat-square)](https://codecov.io/gh/io7m/jpplib)
 
-See https://www.io7m.com/software/jpplib/ for more information.
-
 ![jpplib](./src/site/resources/jpplib.jpg?raw=true)
 
 ## Building

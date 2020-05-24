@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor.full</artifactId>
-    <version>3.1.0</version>
+    <version>5.0.0</version>
   </parent>
 
   <groupId>com.io7m.jpplib</groupId>
   <artifactId>com.io7m.jpplib</artifactId>
-  <version>0.8.0</version>
+  <version>0.8.1</version>
 
   <packaging>pom</packaging>
   <name>com.io7m.jpplib</name>
@@ -27,10 +24,10 @@
   </modules>
 
   <properties>
-    <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
-
-    <!-- Disable CheckStyle and JavaDoc linting -->
     <checkstyle.skip>true</checkstyle.skip>
+    <com.codacy.id>269673febf114ac69376f8073f5251cc</com.codacy.id>
+    <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
+    <io7m.java.targetJavaVersion>8</io7m.java.targetJavaVersion>
     <io7m.javadoc.docLint>-Xdoclint:none</io7m.javadoc.docLint>
   </properties>
 
@@ -69,9 +66,9 @@
 
   <distributionManagement>
     <site>
-      <id>io7m</id>
+      <id>io7m.com</id>
       <name>io7m.com</name>
-      <url>https://www.io7m.com/software/jpplib/</url>
+      <url>https://www.io7m.com/software/jpplib</url>
     </site>
     <repository>
       <id>sonatype-nexus-staging</id>
@@ -107,17 +104,6 @@
   <build>
     <pluginManagement>
       <plugins>
-        <!-- Require JDK >= 8 -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>8</source>
-            <target>8</target>
-            <release>8</release>
-          </configuration>
-        </plugin>
-
         <!-- jstructural plugin for generating documentation. -->
         <plugin>
           <groupId>com.io7m.jstructural</groupId>
