@@ -77,8 +77,8 @@
   </distributionManagement>
 
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/io7m/jpplib</url>
+    <system>GitHub Actions</system>
+    <url>https://github.com/jpplib/actions</url>
   </ciManagement>
 
   <prerequisites>
