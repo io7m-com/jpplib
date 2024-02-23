@@ -25,7 +25,6 @@
 
   <properties>
     <checkstyle.skip>true</checkstyle.skip>
-    <com.codacy.id>269673febf114ac69376f8073f5251cc</com.codacy.id>
     <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
     <io7m.java.targetJavaVersion>8</io7m.java.targetJavaVersion>
     <io7m.javadoc.docLint>-Xdoclint:none</io7m.javadoc.docLint>
