@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor.full</artifactId>
-    <version>5.0.0</version>
+    <version>8.2.0</version>
   </parent>
 
   <groupId>com.io7m.jpplib</groupId>
@@ -16,16 +16,16 @@
   <packaging>pom</packaging>
   <name>com.io7m.jpplib</name>
   <description>Generic pretty printer</description>
-  <url>http://github.com/io7m/jpplib</url>
+  <url>https://www.io7m.com/software/jpplib</url>
 
   <modules>
     <module>com.io7m.jpplib.core</module>
     <module>com.io7m.jpplib.demo</module>
+    <module>com.io7m.jpplib.tests</module>
   </modules>
 
   <properties>
     <checkstyle.skip>true</checkstyle.skip>
-    <com.codacy.id>269673febf114ac69376f8073f5251cc</com.codacy.id>
     <io7m.api.previousVersion>0.8.0</io7m.api.previousVersion>
     <io7m.java.targetJavaVersion>8</io7m.java.targetJavaVersion>
     <io7m.javadoc.docLint>-Xdoclint:none</io7m.javadoc.docLint>
@@ -54,14 +54,14 @@
   </developers>
 
   <issueManagement>
-    <url>http://github.com/io7m/jpplib/issues</url>
+    <url>http://www.github.com/io7m-com/jpplib/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
 
   <scm>
-    <url>https://github.com/io7m/jpplib</url>
-    <connection>scm:git:https://github.com/io7m/jpplib</connection>
-    <developerConnection>scm:git:https://github.com/io7m/jpplib</developerConnection>
+    <url>https://www.github.com/io7m-com/jpplib</url>
+    <connection>scm:git:https://www.github.com/io7m-com/jpplib</connection>
+    <developerConnection>scm:git:https://www.github.com/io7m-com/jpplib</developerConnection>
   </scm>
 
   <distributionManagement>
@@ -72,13 +72,13 @@
     </site>
     <repository>
       <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
   </distributionManagement>
 
   <ciManagement>
-    <system>Travis CI</system>
-    <url>https://travis-ci.org/io7m/jpplib</url>
+    <system>GitHub Actions</system>
+    <url>https://www.github.com/io7m-com/jpplib/actions</url>
   </ciManagement>
 
   <prerequisites>
