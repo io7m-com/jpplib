@@ -48,6 +48,6 @@
     </c:release>
   </c:releases>
   <c:ticket-systems>
-    <c:ticket-system default="false" id="com.github.io7m.jpplib" url="https://github.com/io7m/jpplib/issues/"/>
+    <c:ticket-system default="false" id="com.github.io7m.jpplib" url="https://www.github.com/io7m-com/jpplib/issues/"/>
   </c:ticket-systems>
 </c:changelog>
