@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?><c:changelog xmlns:c="urn:com.io7m.changelog:4.0" project="com.io7m.jpplib">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<c:changelog project="com.io7m.jpplib" xmlns:c="urn:com.io7m.changelog:4.0">
   <c:releases>
-    <c:release date="2016-05-11T00:00:00+00:00" ticket-system="com.github.io7m.jpplib" version="0.7.0">
+    <c:release date="2016-05-11T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.jpplib" version="0.7.0">
       <c:changes>
         <c:change date="2016-05-11T00:00:00+00:00" summary="Initial fork of project."/>
       </c:changes>
     </c:release>
-    <c:release date="2016-05-29T00:00:00+00:00" ticket-system="com.github.io7m.jpplib" version="0.7.1">
+    <c:release date="2016-05-29T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.jpplib" version="0.7.1">
       <c:changes>
         <c:change date="2016-05-12T00:00:00+00:00" summary="Add finish() method to Layouter class">
           <c:tickets>
@@ -19,13 +20,13 @@
         </c:change>
       </c:changes>
     </c:release>
-    <c:release date="2016-08-05T00:00:00+00:00" ticket-system="com.github.io7m.jpplib" version="0.7.2">
+    <c:release date="2016-08-05T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.jpplib" version="0.7.2">
       <c:changes>
         <c:change date="2016-08-05T00:00:00+00:00" summary="Update POM plugins."/>
         <c:change date="2016-08-05T00:00:00+00:00" summary="The packaged jar is now an OSGi bundle."/>
       </c:changes>
     </c:release>
-    <c:release date="2016-09-01T00:00:00+00:00" ticket-system="com.github.io7m.jpplib" version="0.7.3">
+    <c:release date="2016-09-01T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.jpplib" version="0.7.3">
       <c:changes>
         <c:change date="2016-09-01T00:00:00+00:00" summary="Delegate to the correct super method in DataLayouter.">
           <c:tickets>
@@ -34,16 +35,23 @@
         </c:change>
       </c:changes>
     </c:release>
-    <c:release date="2016-09-22T00:00:00+00:00" ticket-system="com.github.io7m.jpplib" version="0.7.4">
+    <c:release date="2016-09-22T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.jpplib" version="0.7.4">
       <c:changes>
         <c:change date="2016-09-22T00:00:00+00:00" summary="Add getDefaultIndentation() to Layout"/>
       </c:changes>
     </c:release>
-    <c:release date="2017-12-07T15:12:06+00:00" ticket-system="com.github.io7m.jpplib" version="0.8.0">
+    <c:release date="2017-12-07T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.jpplib" version="0.8.0">
       <c:changes>
         <c:change date="2017-12-07T00:00:00+00:00" summary="Use primogenitor, rename project to com.io7m.jpplib"/>
         <c:change date="2017-12-07T00:00:00+00:00" summary="Require JDK 9 to build the code (but the result is still Java 8 bytecode)"/>
-        <c:change date="2017-12-07T15:12:06+00:00" summary="Add an Automatic-Module-Name manifest field for use in Java 9 projects"/>
+        <c:change date="2017-12-07T00:00:00+00:00" summary="Add an Automatic-Module-Name manifest field for use in Java 9 projects"/>
+      </c:changes>
+    </c:release>
+    <c:release date="2024-05-10T14:25:44+00:00" is-open="false" ticket-system="com.github.io7m.jpplib" version="1.0.0">
+      <c:changes>
+        <c:change date="2020-10-12T00:00:00+00:00" summary="Update junit:4.12 → 4.13.1."/>
+        <c:change date="2024-04-30T00:00:00+00:00" summary="Update org.slf4j:slf4j-api:2.0.10 → 2.0.13."/>
+        <c:change date="2024-05-10T00:00:00+00:00" summary="Move to new organization."/>
       </c:changes>
     </c:release>
   </c:releases>

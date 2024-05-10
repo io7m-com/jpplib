@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jpplib</groupId>
     <artifactId>com.io7m.jpplib</artifactId>
-    <version>0.8.1</version>
+    <version>1.0.0</version>
   </parent>
   <artifactId>com.io7m.jpplib.tests</artifactId>
 
